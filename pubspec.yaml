@@ -9,10 +9,14 @@ repository: https://github.com/drydart/model_viewer.dart
 issue_tracker: https://github.com/drydart/model_viewer.dart/issues
 documentation:
 dependencies:
+  flutter:
+    sdk: flutter
   meta: ^1.1.8
+  webview_flutter: ^0.3.21
 dev_dependencies:
-  test: any
+  flutter_test:
+    sdk: flutter
 dependency_overrides:
 environment:
   sdk: '>=2.8.1 <3.0.0'
-executables:
+flutter:
