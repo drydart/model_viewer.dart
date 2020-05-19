@@ -1,0 +1,14 @@
+# See: https://docs.travis-ci.com/user/languages/dart/
+language: dart
+sudo: false
+dart:
+  - stable
+dart_task:
+  - test
+  - dartfmt
+  - dartanalyze
+branches:
+  only: [master]
+cache:
+  directories:
+    - $HOME/.pub-cache

@@ -1,0 +1,11 @@
+# macOS
+.DS_Store
+
+# Editor backup files
+*~
+
+# Dart artifacts
+.dart_tool/
+.packages
+build/
+pubspec.lock
