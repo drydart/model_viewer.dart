@@ -89,12 +89,14 @@ class _ModelViewerState extends State<ModelViewer> {
         _controller.complete(webViewController);
         final AssetBundle bundle = DefaultAssetBundle.of(context);
         final ThemeData themeData = Theme.of(context);
-        final String htmlTemplate = await bundle.loadString('packages/model_viewer/etc/assets/template.html');
+        final String htmlTemplate = await bundle
+            .loadString('packages/model_viewer/etc/assets/template.html');
         final String html = _buildHTML(themeData, htmlTemplate);
         final String contentBase64 =
             base64Encode(const Utf8Encoder().convert(html));
         await webViewController.loadUrl('data:text/html;base64,$contentBase64');
-        final js = await bundle.loadString('packages/model_viewer/etc/assets/model-viewer.js');
+        final js = await bundle
+            .loadString('packages/model_viewer/etc/assets/model-viewer.js');
         await webViewController.evaluateJavascript(js);
       },
       onPageStarted: (final String url) {

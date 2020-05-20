@@ -18,10 +18,10 @@ abstract class HTMLBuilder {
       final bool autoPlay,
       final bool cameraControls,
       final String iosSrc}) {
-
     final html = StringBuffer(htmlTemplate);
     html.write('<model-viewer');
-    html.write(' style="background-color: rgb(${backgroundColor.red}, ${backgroundColor.green}, ${backgroundColor.blue});"');
+    html.write(
+        ' style="background-color: rgb(${backgroundColor.red}, ${backgroundColor.green}, ${backgroundColor.blue});"');
     html.write(' src="$src"');
     if (alt != null) {
       html.write(' alt="$alt"'); // TODO: escape string
