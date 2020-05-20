@@ -24,6 +24,7 @@ class _MyAppState extends State<MyApp> {
           title: const Text("Model Viewer"),
         ),
         body: ModelViewer(
+          backgroundColor: Color.fromARGB(0xFF, 0xEE, 0xEE, 0xEE),
           src: 'https://modelviewer.dev/shared-assets/models/Astronaut.glb',
           alt: 'A 3D model of an astronaut',
           ar: true,

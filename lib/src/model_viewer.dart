@@ -3,12 +3,14 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:webview_flutter/platform_interface.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 /// Flutter widget for rendering interactive 3D models.
 class ModelViewer extends StatefulWidget {
   ModelViewer(
       {Key key,
+      this.backgroundColor,
       @required this.src,
       this.alt,
       this.ar,
@@ -20,6 +22,11 @@ class ModelViewer extends StatefulWidget {
       this.cameraControls,
       this.iosSrc})
       : super(key: key);
+
+  /// The background color for the model viewer.
+  ///
+  /// The theme's [ThemeData.scaffoldBackgroundColor] by default.
+  final Color backgroundColor;
 
   /// The URL to the 3D model. This parameter is required. Only glTF/GLB models
   /// are supported.
@@ -70,29 +77,35 @@ class _ModelViewerState extends State<ModelViewer> {
 
   @override
   Widget build(final BuildContext context) {
+    final ThemeData themeData = Theme.of(context);
     return WebView(
       initialUrl: 'about:blank',
       javascriptMode: JavascriptMode.unrestricted,
+      initialMediaPlaybackPolicy: AutoMediaPlaybackPolicy.always_allow,
       onWebViewCreated: (final WebViewController webViewController) async {
         _controller.complete(webViewController);
-        final String html = _buildHTML();
+        final String html = _buildHTML(themeData);
         final String contentBase64 =
             base64Encode(const Utf8Encoder().convert(html));
         await webViewController.loadUrl('data:text/html;base64,$contentBase64');
       },
       onPageStarted: (final String url) {
-        print('>>>>>>>>>>>>>>>>>>> Page started loading: $url'); // DEBUG
+        print('>>>>>>>>>>>>>>>>>>> ModelViewer began loading: $url'); // DEBUG
       },
       onPageFinished: (final String url) {
-        print('>>>>>>>>>>>>>>>>>>> Page finished loading: $url'); // DEBUG
+        print('>>>>>>>>>>>>>>>>>>> ModelViewer finished loading: $url'); // DEBUG
       },
+      onWebResourceError: (final WebResourceError error) {
+        print('>>>>>>>>>>>>>>>>>>> ModelViewer failed to load: $error'); // DEBUG
+      }
     );
   }
 
-  String _buildHTML() {
+  String _buildHTML(final ThemeData themeData) {
+    final color = this.widget.backgroundColor ?? themeData.scaffoldBackgroundColor;
     final prelude = '''
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <style>body, model-viewer { width: 100%; height: 100%; background-color: black; }</style>
+      <meta name="viewport" content="width=device-width, initial-scale=1"/>
+      <style>body, model-viewer { width: 100%; height: 100%; margin: 0; padding: 0; background-color: rgb(${color.red}, ${color.green}, ${color.blue}); }</style>
       <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.js"></script>
       <script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
     ''';
