@@ -21,7 +21,7 @@ Installation
 
 ```yaml
 dependencies:
-  model_viewer: ^0.3.0
+  model_viewer: ^0.4.0
 ```
 
 Examples
