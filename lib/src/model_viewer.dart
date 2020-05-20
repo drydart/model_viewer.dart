@@ -89,7 +89,8 @@ class _ModelViewerState extends State<ModelViewer> {
         _controller.complete(webViewController);
         final AssetBundle bundle = DefaultAssetBundle.of(context);
         final ThemeData themeData = Theme.of(context);
-        final String html = _buildHTML(themeData);
+        final String htmlTemplate = await bundle.loadString('packages/model_viewer/etc/assets/template.html');
+        final String html = _buildHTML(themeData, htmlTemplate);
         final String contentBase64 =
             base64Encode(const Utf8Encoder().convert(html));
         await webViewController.loadUrl('data:text/html;base64,$contentBase64');
@@ -108,8 +109,9 @@ class _ModelViewerState extends State<ModelViewer> {
     );
   }
 
-  String _buildHTML(final ThemeData themeData) {
+  String _buildHTML(final ThemeData themeData, final String htmlTemplate) {
     return HTMLBuilder.build(
+      htmlTemplate: htmlTemplate,
       backgroundColor:
           this.widget.backgroundColor ?? themeData.scaffoldBackgroundColor,
       src: this.widget.src,

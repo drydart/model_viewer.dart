@@ -6,7 +6,8 @@ abstract class HTMLBuilder {
   HTMLBuilder._();
 
   static String build(
-      {@required final Color backgroundColor,
+      {@required final String htmlTemplate,
+      @required final Color backgroundColor,
       @required final String src,
       final String alt,
       final bool ar,
@@ -17,12 +18,8 @@ abstract class HTMLBuilder {
       final bool autoPlay,
       final bool cameraControls,
       final String iosSrc}) {
-    final prelude = '''
-      <meta name="viewport" content="width=device-width, initial-scale=1"/>
-      <style>body, model-viewer { width: 100%; height: 100%; margin: 0; padding: 0; }</style>
-    ''';
 
-    final html = StringBuffer(prelude);
+    final html = StringBuffer(htmlTemplate);
     html.write('<model-viewer');
     html.write(' style="background-color: rgb(${backgroundColor.red}, ${backgroundColor.green}, ${backgroundColor.blue});"');
     html.write(' src="$src"');
