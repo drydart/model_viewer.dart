@@ -13,39 +13,49 @@ This is a Flutter widget for rendering interactive 3D models in the
 Prerequisites
 -------------
 
-- [Dart](https://dart.dev) 2.8.1+
-
-- [Flutter](https://flutter.dev) 1.17.0+
+- [Dart](https://dart.dev) 2.8.1+ and
+  [Flutter](https://flutter.dev) 1.17.0+
 
 Installation
 ------------
 
-    dependencies:
-      model_viewer: ^0.2.0
+```yaml
+dependencies:
+  model_viewer: ^0.2.0
+```
 
 Examples
 --------
 
 ### Importing the library
 
-    import 'package:model_viewer/model_viewer.dart';
+```dart
+import 'package:model_viewer/model_viewer.dart';
+```
 
 ### Creating a ModelViewer widget
 
-    class MyApp extends StatelessWidget {
-      @override
-      Widget build(BuildContext context) {
-        return MaterialApp(
-          home: Scaffold(
-            appBar: AppBar(title: Text("Model Viewer")),
-            body: ModelViewer(
-              src: 'https://modelviewer.dev/shared-assets/models/Astronaut.glb',
-              alt: "A 3D model of an astronaut",
-              ar: true,
-              autoRotate: true,
-              cameraControls: true,
-            ),
-          ),
-        );
-      }
-    }
+```dart
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: Text("Model Viewer")),
+        body: ModelViewer(
+          src: 'https://modelviewer.dev/shared-assets/models/Astronaut.glb',
+          alt: "A 3D model of an astronaut",
+          ar: true,
+          autoRotate: true,
+          cameraControls: true,
+        ),
+      ),
+    );
+  }
+}
+```
+
+Screenshot
+----------
+
+<img alt="Screenshot of astronaut model" src="https://raw.githubusercontent.com/drydart/model_viewer.dart/master/example/flutter_01.png" width="480"/>
