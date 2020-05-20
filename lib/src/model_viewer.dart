@@ -90,12 +90,42 @@ class _ModelViewerState extends State<ModelViewer> {
   }
 
   String _buildHTML() {
-    return '''
+    final prelude = '''
       <meta name="viewport" content="width=device-width, initial-scale=1">
-      <style>body { width: 100%; height: 100%; background-color: black; } model-viewer { width: 100%; height: 100%; }</style>
+      <style>body, model-viewer { width: 100%; height: 100%; background-color: black; }</style>
       <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.js"></script>
       <script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
-      <model-viewer src="${this.widget.src}" alt="${this.widget.alt}" auto-rotate camera-controls></model-viewer>
     ''';
+    final html = StringBuffer(prelude);
+    html.write('<model-viewer src="${this.widget.src}"');
+    if (this.widget.alt != null) {
+      html.write(' alt="${this.widget.alt}"'); // TODO: escape string
+    }
+    if (this.widget.ar ?? false) {
+      html.write(' ar');
+    }
+    if (this.widget.arModes != null) {
+      html.write(' ar-modes="${this.widget.arModes.join(' ')}"'); // TODO: escape string
+    }
+    if (this.widget.arScale != null) {
+      html.write(' ar-scale="${this.widget.arScale}"'); // TODO: escape string
+    }
+    if (this.widget.autoRotate ?? false) {
+      html.write(' auto-rotate');
+    }
+    if (this.widget.autoRotateDelay != null) {
+      html.write(' auto-rotate-delay="${this.widget.autoRotateDelay}"');
+    }
+    if (this.widget.autoPlay ?? false) {
+      html.write(' autoplay');
+    }
+    if (this.widget.cameraControls ?? false) {
+      html.write(' camera-controls');
+    }
+    if (this.widget.iosSrc != null) {
+      html.write(' ios-src="${this.widget.iosSrc}"'); // TODO: escape string
+    }
+    html.writeln('></model-viewer>');
+    return html.toString();
   }
 }

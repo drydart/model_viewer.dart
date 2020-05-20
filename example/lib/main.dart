@@ -26,6 +26,9 @@ class _MyAppState extends State<MyApp> {
         body: ModelViewer(
           src: 'https://modelviewer.dev/shared-assets/models/Astronaut.glb',
           alt: 'A 3D model of an astronaut',
+          ar: true,
+          autoRotate: true,
+          cameraControls: true,
         ),
       ),
     );
