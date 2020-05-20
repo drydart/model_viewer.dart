@@ -1,8 +1,6 @@
 /* This is free and unencumbered software released into the public domain. */
 
-import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:model_viewer/model_viewer.dart';
 
 void main() => runApp(MyApp());
@@ -25,8 +23,9 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text("Model Viewer"),
         ),
-        body: Center(
-          child: Text("TODO"), // TODO
+        body: ModelViewer(
+          src: 'https://modelviewer.dev/shared-assets/models/Astronaut.glb',
+          alt: 'A 3D model of an astronaut',
         ),
       ),
     );
