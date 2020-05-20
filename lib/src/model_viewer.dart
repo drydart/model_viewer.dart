@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/platform_interface.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import 'html_builder.dart';
+
 /// Flutter widget for rendering interactive 3D models.
 class ModelViewer extends StatefulWidget {
   ModelViewer(
@@ -90,59 +92,31 @@ class _ModelViewerState extends State<ModelViewer> {
         await webViewController.loadUrl('data:text/html;base64,$contentBase64');
       },
       onPageStarted: (final String url) {
-        print('>>>>>>>>>>>>>>>>>>> ModelViewer began loading: $url'); // DEBUG
+        print('>>>>>>>>>>>>>>>>> ModelViewer began loading: $url'); // DEBUG
       },
       onPageFinished: (final String url) {
-        print(
-            '>>>>>>>>>>>>>>>>>>> ModelViewer finished loading: $url'); // DEBUG
+        print('>>>>>>>>>>>>>>>>> ModelViewer finished loading: $url'); // DEBUG
       },
       onWebResourceError: (final WebResourceError error) {
-        print(
-            '>>>>>>>>>>>>>>>>>>> ModelViewer failed to load: $error'); // DEBUG
+        print('>>>>>>>>>>>>>>>>> ModelViewer failed to load: $error'); // DEBUG
       },
     );
   }
 
   String _buildHTML(final ThemeData themeData) {
-    final color =
-        this.widget.backgroundColor ?? themeData.scaffoldBackgroundColor;
-    final prelude = '''
-      <meta name="viewport" content="width=device-width, initial-scale=1"/>
-      <style>body, model-viewer { width: 100%; height: 100%; margin: 0; padding: 0; background-color: rgb(${color.red}, ${color.green}, ${color.blue}); }</style>
-      <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.js"></script>
-      <script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
-    ''';
-    final html = StringBuffer(prelude);
-    html.write('<model-viewer src="${this.widget.src}"');
-    if (this.widget.alt != null) {
-      html.write(' alt="${this.widget.alt}"'); // TODO: escape string
-    }
-    if (this.widget.ar ?? false) {
-      html.write(' ar');
-    }
-    if (this.widget.arModes != null) {
-      html.write(
-          ' ar-modes="${this.widget.arModes.join(' ')}"'); // TODO: escape string
-    }
-    if (this.widget.arScale != null) {
-      html.write(' ar-scale="${this.widget.arScale}"'); // TODO: escape string
-    }
-    if (this.widget.autoRotate ?? false) {
-      html.write(' auto-rotate');
-    }
-    if (this.widget.autoRotateDelay != null) {
-      html.write(' auto-rotate-delay="${this.widget.autoRotateDelay}"');
-    }
-    if (this.widget.autoPlay ?? false) {
-      html.write(' autoplay');
-    }
-    if (this.widget.cameraControls ?? false) {
-      html.write(' camera-controls');
-    }
-    if (this.widget.iosSrc != null) {
-      html.write(' ios-src="${this.widget.iosSrc}"'); // TODO: escape string
-    }
-    html.writeln('></model-viewer>');
-    return html.toString();
+    return HTMLBuilder.build(
+      backgroundColor:
+          this.widget.backgroundColor ?? themeData.scaffoldBackgroundColor,
+      src: this.widget.src,
+      alt: this.widget.alt,
+      ar: this.widget.ar,
+      arModes: this.widget.arModes,
+      arScale: this.widget.arScale,
+      autoRotate: this.widget.autoRotate,
+      autoRotateDelay: this.widget.autoRotateDelay,
+      autoPlay: this.widget.autoPlay,
+      cameraControls: this.widget.cameraControls,
+      iosSrc: this.widget.iosSrc,
+    );
   }
 }
