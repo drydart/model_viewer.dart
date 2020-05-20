@@ -21,7 +21,7 @@ Installation
 ------------
 
     dependencies:
-      model_viewer: ^0.1.0
+      model_viewer: ^0.2.0
 
 Examples
 --------
