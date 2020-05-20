@@ -19,11 +19,13 @@ abstract class HTMLBuilder {
       final String iosSrc}) {
     final prelude = '''
       <meta name="viewport" content="width=device-width, initial-scale=1"/>
-      <style>body, model-viewer { width: 100%; height: 100%; margin: 0; padding: 0; background-color: rgb(${backgroundColor.red}, ${backgroundColor.green}, ${backgroundColor.blue}); }</style>
+      <style>body, model-viewer { width: 100%; height: 100%; margin: 0; padding: 0; }</style>
     ''';
 
     final html = StringBuffer(prelude);
-    html.write('<model-viewer src="$src"');
+    html.write('<model-viewer');
+    html.write(' style="background-color: rgb(${backgroundColor.red}, ${backgroundColor.green}, ${backgroundColor.blue});"');
+    html.write(' src="$src"');
     if (alt != null) {
       html.write(' alt="$alt"'); // TODO: escape string
     }
