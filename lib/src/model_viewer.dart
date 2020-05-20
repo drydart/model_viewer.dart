@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show AssetBundle;
 import 'package:webview_flutter/platform_interface.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -79,23 +80,27 @@ class _ModelViewerState extends State<ModelViewer> {
 
   @override
   Widget build(final BuildContext context) {
-    final ThemeData themeData = Theme.of(context);
     return WebView(
-      initialUrl: 'about:blank',
+      initialUrl: null,
       javascriptMode: JavascriptMode.unrestricted,
       initialMediaPlaybackPolicy: AutoMediaPlaybackPolicy.always_allow,
       onWebViewCreated: (final WebViewController webViewController) async {
+        print('>>>>>>>>>>>>>>>>> ModelViewer initializing...'); // DEBUG
         _controller.complete(webViewController);
+        final AssetBundle bundle = DefaultAssetBundle.of(context);
+        final ThemeData themeData = Theme.of(context);
         final String html = _buildHTML(themeData);
         final String contentBase64 =
             base64Encode(const Utf8Encoder().convert(html));
         await webViewController.loadUrl('data:text/html;base64,$contentBase64');
+        final js = await bundle.loadString('packages/model_viewer/etc/assets/model-viewer.js');
+        await webViewController.evaluateJavascript(js);
       },
       onPageStarted: (final String url) {
-        print('>>>>>>>>>>>>>>>>> ModelViewer began loading: $url'); // DEBUG
+        //print('>>>>>>>>>>>>>>>>> ModelViewer began loading: $url'); // DEBUG
       },
       onPageFinished: (final String url) {
-        print('>>>>>>>>>>>>>>>>> ModelViewer finished loading: $url'); // DEBUG
+        //print('>>>>>>>>>>>>>>>>> ModelViewer finished loading: $url'); // DEBUG
       },
       onWebResourceError: (final WebResourceError error) {
         print('>>>>>>>>>>>>>>>>> ModelViewer failed to load: $error'); // DEBUG

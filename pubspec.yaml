@@ -21,4 +21,4 @@ environment:
   flutter: '>= 1.17.0 <2.0.0'
 flutter:
   assets:
-    - etc/assets
+    - etc/assets/model-viewer.js

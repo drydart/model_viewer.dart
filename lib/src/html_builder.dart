@@ -20,8 +20,6 @@ abstract class HTMLBuilder {
     final prelude = '''
       <meta name="viewport" content="width=device-width, initial-scale=1"/>
       <style>body, model-viewer { width: 100%; height: 100%; margin: 0; padding: 0; background-color: rgb(${backgroundColor.red}, ${backgroundColor.green}, ${backgroundColor.blue}); }</style>
-      <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.js"></script>
-      <script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
     ''';
 
     final html = StringBuffer(prelude);
