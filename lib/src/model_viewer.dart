@@ -93,16 +93,19 @@ class _ModelViewerState extends State<ModelViewer> {
         print('>>>>>>>>>>>>>>>>>>> ModelViewer began loading: $url'); // DEBUG
       },
       onPageFinished: (final String url) {
-        print('>>>>>>>>>>>>>>>>>>> ModelViewer finished loading: $url'); // DEBUG
+        print(
+            '>>>>>>>>>>>>>>>>>>> ModelViewer finished loading: $url'); // DEBUG
       },
       onWebResourceError: (final WebResourceError error) {
-        print('>>>>>>>>>>>>>>>>>>> ModelViewer failed to load: $error'); // DEBUG
-      }
+        print(
+            '>>>>>>>>>>>>>>>>>>> ModelViewer failed to load: $error'); // DEBUG
+      },
     );
   }
 
   String _buildHTML(final ThemeData themeData) {
-    final color = this.widget.backgroundColor ?? themeData.scaffoldBackgroundColor;
+    final color =
+        this.widget.backgroundColor ?? themeData.scaffoldBackgroundColor;
     final prelude = '''
       <meta name="viewport" content="width=device-width, initial-scale=1"/>
       <style>body, model-viewer { width: 100%; height: 100%; margin: 0; padding: 0; background-color: rgb(${color.red}, ${color.green}, ${color.blue}); }</style>
@@ -118,7 +121,8 @@ class _ModelViewerState extends State<ModelViewer> {
       html.write(' ar');
     }
     if (this.widget.arModes != null) {
-      html.write(' ar-modes="${this.widget.arModes.join(' ')}"'); // TODO: escape string
+      html.write(
+          ' ar-modes="${this.widget.arModes.join(' ')}"'); // TODO: escape string
     }
     if (this.widget.arScale != null) {
       html.write(' ar-scale="${this.widget.arScale}"'); // TODO: escape string
