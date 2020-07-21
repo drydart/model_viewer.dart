@@ -1,31 +1,27 @@
-3D Model Viewer for Flutter
-===========================
+# 3D Model Viewer for Flutter
 
 [![Project license](https://img.shields.io/badge/license-Public%20Domain-blue.svg)](https://unlicense.org)
+![Dart compatibility](https://img.shields.io/badge/dart-2.8%20%7C%202.9-blue)
 [![Pub package](https://img.shields.io/pub/v/model_viewer.svg)](https://pub.dev/packages/model_viewer)
 [![Dartdoc reference](https://img.shields.io/badge/dartdoc-reference-blue.svg)](https://pub.dev/documentation/model_viewer/latest/)
-[![Travis CI build status](https://img.shields.io/travis/drydart/model_viewer.dart/master.svg)](https://travis-ci.org/drydart/model_viewer.dart)
 
 This is a Flutter widget for rendering interactive 3D models in the
 [glTF](https://www.khronos.org/gltf/) and
 [GLB](https://wiki.fileformat.com/3d/glb/) formats.
 
-Prerequisites
--------------
+## Prerequisites
 
-- [Dart](https://dart.dev) 2.8.1+ and
-  [Flutter](https://flutter.dev) 1.17.0+
+- [Dart](https://dart.dev) 2.8+ and
+  [Flutter](https://flutter.dev) 1.17+
 
-Installation
-------------
+## Installation
 
 ```yaml
 dependencies:
   model_viewer: ^0.4.0
 ```
 
-Examples
---------
+## Examples
 
 ### Importing the library
 
@@ -55,7 +51,6 @@ class MyApp extends StatelessWidget {
 }
 ```
 
-Screenshot
-----------
+## Screenshot
 
 <img alt="Screenshot of astronaut model" src="https://raw.githubusercontent.com/drydart/model_viewer.dart/master/example/flutter_01.png" width="480"/>

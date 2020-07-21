@@ -1,8 +1,14 @@
 # macOS
 .DS_Store
 
+# Visual Studio Code
+.vscode/
+
 # Editor backup files
 *~
+
+# Pandoc outputs
+*.html
 
 # Dart artifacts
 .dart_tool/
