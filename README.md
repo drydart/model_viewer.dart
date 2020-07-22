@@ -12,6 +12,10 @@ This is a Flutter widget for rendering interactive 3D models in the
 The widget embeds Google's [`<model-viewer>`](https://modelviewer.dev)
 web component in a [WebView](https://pub.dev/packages/webview_flutter).
 
+## Screenshot
+
+<img alt="Screenshot of astronaut model" src="https://raw.githubusercontent.com/drydart/model_viewer.dart/master/example/flutter_01.png" width="480"/>
+
 ## Prerequisites
 
 - [Dart](https://dart.dev) 2.8+ and
@@ -56,10 +60,6 @@ class MyApp extends StatelessWidget {
   }
 }
 ```
-
-## Screenshot
-
-<img alt="Screenshot of astronaut model" src="https://raw.githubusercontent.com/drydart/model_viewer.dart/master/example/flutter_01.png" width="480"/>
 
 ## Frequently Asked Questions
 
