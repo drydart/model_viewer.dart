@@ -6,9 +6,9 @@ abstract class HTMLBuilder {
   HTMLBuilder._();
 
   static String build(
-      {@required final String htmlTemplate,
-      @required final Color backgroundColor,
+      {final String htmlTemplate = '',
       @required final String src,
+      final Color backgroundColor = const Color(0xFFFFFF),
       final String alt,
       final bool ar,
       final List<String> arModes,
@@ -20,9 +20,9 @@ abstract class HTMLBuilder {
       final String iosSrc}) {
     final html = StringBuffer(htmlTemplate);
     html.write('<model-viewer');
+    html.write(' src="$src"');
     html.write(
         ' style="background-color: rgb(${backgroundColor.red}, ${backgroundColor.green}, ${backgroundColor.blue});"');
-    html.write(' src="$src"');
     if (alt != null) {
       html.write(' alt="$alt"'); // TODO: escape string
     }
