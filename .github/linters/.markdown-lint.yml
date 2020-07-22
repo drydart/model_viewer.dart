@@ -1,0 +1,24 @@
+# See: https://github.com/github/super-linter/blob/master/docs/disabling-linters.md#markdown
+# See: https://github.com/github/super-linter/blob/master/TEMPLATES/.markdown-lint.yml
+---
+MD013:        # line-length
+  code_blocks: false
+  tables: false
+  headings: false
+MD014: false  # commands-show-output
+MD022:        # blanks-around-headings
+  lines_above: 1
+  lines_below: 0
+MD024:        # no-duplicate-heading
+  siblings_only: true
+MD026:        # no-trailing-punctuation
+  punctuation: ".,;:!。，；:"
+MD033: false  # no-inline-html
+MD044:        # proper-names
+  names:
+    - JavaScript
+  code_blocks: false
+MD046:        # code-block-style
+  style: consistent
+MD048:        # code-fence-style
+  style: backtick

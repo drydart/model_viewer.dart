@@ -1,0 +1,35 @@
+# See: https://github.com/github/super-linter
+---
+name: Linter
+on:
+  push:
+    branches: [master]
+    paths:
+      - '**.dart'
+      - '**.md'
+      - '**.yaml'
+      - '**.yml'
+  pull_request:
+    branches: [master]
+    paths:
+      - '**.dart'
+      - '**.md'
+      - '**.yaml'
+      - '**.yml'
+jobs:
+  lint:
+    name: Lint code base
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v2
+      - name: Lint Markdown and YAML files
+        uses: docker://github/super-linter:v3.3.2
+        env:
+          VALIDATE_MD: true
+          VALIDATE_YAML: true
+      - name: Lint Dart source code
+        uses: docker://github/super-linter:v3.3.2
+        env:
+          VALIDATE_DART: true
+          DISABLE_ERRORS: true  # FIXME
