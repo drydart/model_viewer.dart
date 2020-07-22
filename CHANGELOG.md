@@ -7,4 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.5.0] - 2020-07-22
 
-### Changed
+### Added
+
+- Frequently asked questions and answers in the README
+
+[0.5.0]: https://github.com/drydart/model_viewer.dart/compare/0.4.0...0.5.0
