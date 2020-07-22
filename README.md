@@ -18,7 +18,7 @@ This is a Flutter widget for rendering interactive 3D models in the
 
 ```yaml
 dependencies:
-  model_viewer: ^0.4.0
+  model_viewer: ^0.5.0
 ```
 
 ## Examples
