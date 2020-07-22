@@ -3,7 +3,7 @@ name: CI
 on: push
 jobs:
   test:
-    name: Run unit tests
+    name: Run tests
     runs-on: ubuntu-18.04
     steps:
       - name: Clone repository

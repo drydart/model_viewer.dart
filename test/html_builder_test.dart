@@ -10,7 +10,9 @@ void main() {
   group('HTMLBuilder', () {
     test('supports the src and backgroundColor attributes', () {
       final html = HTMLBuilder.build(
-          src: 'src.glb', backgroundColor: const Color(0xABCDEF));
+        src: 'src.glb',
+        backgroundColor: const Color(0xABCDEF),
+      );
       expect(html,
           '<model-viewer src="src.glb" style="background-color: rgb(171, 205, 239);"></model-viewer>\n');
     });
