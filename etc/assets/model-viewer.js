@@ -119113,5 +119113,5 @@ const FocusVisiblePolyfillMixin = (SuperClass) => {
 const ModelViewerElement = AnnotationMixin(SceneGraphMixin(StagingMixin(EnvironmentMixin(ControlsMixin(ARMixin(LoadingMixin(AnimationMixin(FocusVisiblePolyfillMixin(ModelViewerElementBase)))))))));
 customElements.define('model-viewer', ModelViewerElement);
 
-export { ModelViewerElement };
+//export { ModelViewerElement };
 //# sourceMappingURL=model-viewer.js.map
