@@ -20,6 +20,7 @@ abstract class HTMLBuilder {
       final bool autoPlay,
       final bool cameraControls,
       final String iosSrc}) {
+
     final html = StringBuffer(htmlTemplate);
     html.write('<model-viewer');
     html.write(' src="${htmlEscape.convert(src)}"');
@@ -28,6 +29,8 @@ abstract class HTMLBuilder {
     if (alt != null) {
       html.write(' alt="${htmlEscape.convert(alt)}"');
     }
+    // TODO: animation-name
+    // TODO: animation-crossfade-duration
     if (ar ?? false) {
       html.write(' ar');
     }
@@ -46,12 +49,32 @@ abstract class HTMLBuilder {
     if (autoPlay ?? false) {
       html.write(' autoplay');
     }
+    // TODO: skybox-image
     if (cameraControls ?? false) {
       html.write(' camera-controls');
     }
+    // TODO: camera-orbit
+    // TODO: camera-target
+    // TODO: environment-image
+    // TODO: exposure
+    // TODO: field-of-view
+    // TODO: interaction-policy
+    // TODO: interaction-prompt
+    // TODO: interaction-prompt-style
+    // TODO: interaction-prompt-threshold
     if (iosSrc != null) {
       html.write(' ios-src="${htmlEscape.convert(iosSrc)}"');
     }
+    // TODO: max-camera-orbit
+    // TODO: max-field-of-view
+    // TODO: min-camera-orbit
+    // TODO: min-field-of-view
+    // TODO: poster
+    // TODO: loading
+    // TODO: quick-look-browsers
+    // TODO: reveal
+    // TODO: shadow-intensity
+    // TODO: shadow-softness
     html.writeln('></model-viewer>');
     return html.toString();
   }
