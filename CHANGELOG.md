@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.7.0] - 2020-08-18
 
+### Fixed
+
+- Improved error logging in case of loading errors.
+
 ## [0.6.0] - 2020-08-18
 
 ### Fixed

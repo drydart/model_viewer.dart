@@ -106,7 +106,7 @@ class _ModelViewerState extends State<ModelViewer> {
         //print('>>>>>>>>>>>>>>>>> ModelViewer finished loading: $url'); // DEBUG
       },
       onWebResourceError: (final WebResourceError error) {
-        print('>>>>>>>>>>>>>>>>> ModelViewer failed to load: $error'); // DEBUG
+        print('>>>>>>>>>>>>>>>>> ModelViewer failed to load: ${error.description} (${error.errorType} ${error.errorCode})'); // DEBUG
       },
     );
   }
