@@ -1,5 +1,7 @@
 /* This is free and unencumbered software released into the public domain. */
 
+import 'dart:convert' show htmlEscape;
+
 import 'package:flutter/material.dart';
 
 abstract class HTMLBuilder {
@@ -20,20 +22,20 @@ abstract class HTMLBuilder {
       final String iosSrc}) {
     final html = StringBuffer(htmlTemplate);
     html.write('<model-viewer');
-    html.write(' src="$src"');
+    html.write(' src="${htmlEscape.convert(src)}"');
     html.write(
         ' style="background-color: rgb(${backgroundColor.red}, ${backgroundColor.green}, ${backgroundColor.blue});"');
     if (alt != null) {
-      html.write(' alt="$alt"'); // TODO: escape string
+      html.write(' alt="${htmlEscape.convert(alt)}"');
     }
     if (ar ?? false) {
       html.write(' ar');
     }
     if (arModes != null) {
-      html.write(' ar-modes="${arModes.join(' ')}"'); // TODO: escape string
+      html.write(' ar-modes="${htmlEscape.convert(arModes.join(' '))}"');
     }
     if (arScale != null) {
-      html.write(' ar-scale="$arScale"'); // TODO: escape string
+      html.write(' ar-scale="${htmlEscape.convert(arScale)}"');
     }
     if (autoRotate ?? false) {
       html.write(' auto-rotate');
@@ -48,7 +50,7 @@ abstract class HTMLBuilder {
       html.write(' camera-controls');
     }
     if (iosSrc != null) {
-      html.write(' ios-src="$iosSrc"'); // TODO: escape string
+      html.write(' ios-src="${htmlEscape.convert(iosSrc)}"');
     }
     html.writeln('></model-viewer>');
     return html.toString();
