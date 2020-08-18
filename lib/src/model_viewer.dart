@@ -2,8 +2,11 @@
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io' show Platform;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show AssetBundle;
+import 'package:flutter_android/android_content.dart' as android_content;
 import 'package:webview_flutter/platform_interface.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -85,7 +88,7 @@ class _ModelViewerState extends State<ModelViewer> {
       javascriptMode: JavascriptMode.unrestricted,
       initialMediaPlaybackPolicy: AutoMediaPlaybackPolicy.always_allow,
       onWebViewCreated: (final WebViewController webViewController) async {
-        print('>>>>>>>>>>>>>>>>> ModelViewer initializing...'); // DEBUG
+        print('>>>> ModelViewer initializing...'); // DEBUG
         _controller.complete(webViewController);
         final AssetBundle bundle = DefaultAssetBundle.of(context);
         final ThemeData themeData = Theme.of(context);
@@ -99,14 +102,43 @@ class _ModelViewerState extends State<ModelViewer> {
             .loadString('packages/model_viewer/etc/assets/model-viewer.js');
         await webViewController.evaluateJavascript(js);
       },
+      navigationDelegate: (final NavigationRequest navigation) async {
+        //print('>>>> ModelViewer wants to load: <${navigation.url}>'); // DEBUG
+        if (!Platform.isAndroid) {
+          return NavigationDecision.navigate;
+        }
+        if (!navigation.url.startsWith("intent://")) {
+          return NavigationDecision.navigate;
+        }
+        try {
+          // See: https://developers.google.com/ar/develop/java/scene-viewer
+          final intent = android_content.Intent(
+            action: "android.intent.action.VIEW", // Intent.ACTION_VIEW
+            data: Uri.parse("https://arvr.google.com/scene-viewer/1.0").replace(
+              queryParameters: <String, dynamic>{
+                'file': this.widget.src,
+                'mode': 'ar_only',
+              },
+            ),
+            //package: "com.google.android.googlequicksearchbox",
+            package: "com.google.ar.core",
+            flags: 0x10000000, // Intent.FLAG_ACTIVITY_NEW_TASK,
+          );
+          await intent.startActivity();
+        } catch (error) {
+          print('>>>> ModelViewer failed to launch AR: $error'); // DEBUG
+        }
+        return NavigationDecision.prevent;
+      },
       onPageStarted: (final String url) {
-        //print('>>>>>>>>>>>>>>>>> ModelViewer began loading: $url'); // DEBUG
+        //print('>>>> ModelViewer began loading: <$url>'); // DEBUG
       },
       onPageFinished: (final String url) {
-        //print('>>>>>>>>>>>>>>>>> ModelViewer finished loading: $url'); // DEBUG
+        //print('>>>> ModelViewer finished loading: <$url>'); // DEBUG
       },
       onWebResourceError: (final WebResourceError error) {
-        print('>>>>>>>>>>>>>>>>> ModelViewer failed to load: ${error.description} (${error.errorType} ${error.errorCode})'); // DEBUG
+        print(
+            '>>>> ModelViewer failed to load: ${error.description} (${error.errorType} ${error.errorCode})'); // DEBUG
       },
     );
   }

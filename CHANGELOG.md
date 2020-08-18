@@ -10,13 +10,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Dependency on [Flutter Android bindings](https://pub.dev/packages/flutter_android)
-  to handle launching the Scene Viewer. (#4)
+  for launching the Scene Viewer. ([#4])
 
 ### Changed
 
 - Upgraded to model-viewer.js [1.1.0](https://github.com/google/model-viewer/releases/tag/v1.1.0).
 
 ### Fixed
+
+- Launching the Scene Viewer on Android now works. (Fixes [#4])
 
 - Improved error logging in case of loading errors.
 
@@ -35,3 +37,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [0.7.0]: https://github.com/drydart/model_viewer.dart/compare/0.6.0...0.7.0
 [0.6.0]: https://github.com/drydart/model_viewer.dart/compare/0.5.0...0.6.0
 [0.5.0]: https://github.com/drydart/model_viewer.dart/compare/0.4.0...0.5.0
+
+[#4]:    https://github.com/drydart/model_viewer.dart/issues/4

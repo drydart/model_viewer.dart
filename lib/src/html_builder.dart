@@ -20,7 +20,6 @@ abstract class HTMLBuilder {
       final bool autoPlay,
       final bool cameraControls,
       final String iosSrc}) {
-
     final html = StringBuffer(htmlTemplate);
     html.write('<model-viewer');
     html.write(' src="${htmlEscape.convert(src)}"');
