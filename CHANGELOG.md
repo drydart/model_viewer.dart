@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.7.0] - 2020-08-18
 
+### Added
+
+- Dependency on [Flutter Android bindings](https://pub.dev/packages/flutter_android)
+  to handle launching the Scene Viewer. (#4)
+
+### Changed
+
+- Upgraded to model-viewer.js [1.1.0](https://github.com/google/model-viewer/releases/tag/v1.1.0).
+
 ### Fixed
 
 - Improved error logging in case of loading errors.
