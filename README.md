@@ -1,12 +1,12 @@
 # 3D Model Viewer for Flutter
 
 [![Project license](https://img.shields.io/badge/license-Public%20Domain-blue.svg)](https://unlicense.org)
-![Dart compatibility](https://img.shields.io/badge/dart-2.8%20%7C%202.9-blue)
+[![Dart compatibility](https://img.shields.io/badge/dart-2.8%2B-blue)](https://pub.dev/packages/model_viewer)
 [![Pub package](https://img.shields.io/pub/v/model_viewer.svg)](https://pub.dev/packages/model_viewer)
 [![Dartdoc reference](https://img.shields.io/badge/dartdoc-reference-blue.svg)](https://pub.dev/documentation/model_viewer/latest/)
 
-This is a Flutter widget for rendering interactive 3D models in the
-[glTF](https://www.khronos.org/gltf/) and
+This is a [Flutter](https://flutter.dev) widget for rendering interactive
+3D models in the [glTF](https://www.khronos.org/gltf/) and
 [GLB](https://wiki.fileformat.com/3d/glb/) formats.
 
 The widget embeds Google's [`<model-viewer>`](https://modelviewer.dev)
@@ -18,18 +18,43 @@ web component in a [WebView](https://pub.dev/packages/webview_flutter).
 
 ## Prerequisites
 
-- [Dart](https://dart.dev) 2.8+ and
-  [Flutter](https://flutter.dev) 1.17+
+- [Dart](https://dart.dev) 2.8+ and [Flutter](https://flutter.dev) 1.17+
 
-- Android or iOS with
-  [a recent browser version](https://modelviewer.dev/#section-browser-support)
+## Compatibility
+
+Android and iOS, with [a recent system browser version](https://modelviewer.dev/#section-browser-support).
 
 ## Installation
 
+### `pubspec.yaml`
+
 ```yaml
 dependencies:
-  model_viewer: ^0.5.0
+  model_viewer: ^0.7.0
 ```
+
+### `Info.plist` (iOS only)
+
+To use this widget on iOS, you need to opt-in to the embedded views preview
+by adding a boolean property to your app's `Info.plist` file, with the key
+`io.flutter.embedded_views_preview` and the value `YES`. See the
+[WebView](https://pub.dev/packages/webview_flutter) plugin's documentation
+for more information.
+
+## Features
+
+- Renders glTF and GLB models. (Also, [USDZ] models on iOS 12+.)
+
+- Supports animated models, with a configurable auto-play setting.
+
+- Optionally supports launching the model into an [AR] viewer.
+
+- Optionally auto-rotates the model, with a configurable delay.
+
+- Supports a configurable background color for the widget.
+
+[USDZ]: https://graphics.pixar.com/usd/docs/Usdz-File-Format-Specification.html
+[AR]:   https://en.wikipedia.org/wiki/Augmented_reality
 
 ## Examples
 
@@ -39,7 +64,7 @@ dependencies:
 import 'package:model_viewer/model_viewer.dart';
 ```
 
-### Creating a ModelViewer widget
+### Creating a `ModelViewer` widget
 
 ```dart
 class MyApp extends StatelessWidget {
