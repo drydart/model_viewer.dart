@@ -1,0 +1,10 @@
+# See: https://dart.dev/guides/language/analysis-options
+# See: https://github.com/github/super-linter/blob/master/TEMPLATES/analysis_options.yaml
+---
+include: package:pedantic/analysis_options.1.9.0.yaml
+analyzer:
+  exclude:
+    - example/**.dart
+linter:
+  rules:
+    prefer_single_quotes: false
