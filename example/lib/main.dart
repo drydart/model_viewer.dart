@@ -13,7 +13,8 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(title: Text("Model Viewer")),
         body: ModelViewer(
           backgroundColor: Color.fromARGB(0xFF, 0xEE, 0xEE, 0xEE),
-          src: 'https://modelviewer.dev/shared-assets/models/Astronaut.glb',
+          //src: 'https://modelviewer.dev/shared-assets/models/Astronaut.glb',
+          src: 'etc/assets/Astronaut.glb', // a bundled asset file
           alt: "A 3D model of an astronaut",
           ar: true,
           autoRotate: true,

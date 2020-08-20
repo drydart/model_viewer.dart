@@ -1,9 +1,9 @@
 /* This is free and unencumbered software released into the public domain. */
 
-import 'dart:async';
-import 'dart:convert';
+import 'dart:async' show Completer;
 import 'dart:io'
-    show HttpRequest, HttpServer, HttpStatus, InternetAddress, Platform;
+    show File, HttpRequest, HttpServer, HttpStatus, InternetAddress, Platform;
+import 'dart:typed_data' show Uint8List;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -27,8 +27,7 @@ class ModelViewer extends StatefulWidget {
       this.autoRotateDelay,
       this.autoPlay,
       this.cameraControls,
-      this.iosSrc,
-      this.proxy = true})
+      this.iosSrc})
       : super(key: key);
 
   /// The background color for the model viewer.
@@ -75,8 +74,6 @@ class ModelViewer extends StatefulWidget {
   /// via AR Quick Look.
   final String iosSrc;
 
-  final bool proxy;
-
   @override
   State<ModelViewer> createState() => _ModelViewerState();
 }
@@ -90,9 +87,7 @@ class _ModelViewerState extends State<ModelViewer> {
   @override
   void initState() {
     super.initState();
-    if (widget.proxy) {
-      _initProxy();
-    }
+    _initProxy();
   }
 
   @override
@@ -105,6 +100,12 @@ class _ModelViewerState extends State<ModelViewer> {
   }
 
   @override
+  void didUpdateWidget(final ModelViewer oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // TODO
+  }
+
+  @override
   Widget build(final BuildContext context) {
     return WebView(
       initialUrl: null,
@@ -112,26 +113,11 @@ class _ModelViewerState extends State<ModelViewer> {
       initialMediaPlaybackPolicy: AutoMediaPlaybackPolicy.always_allow,
       onWebViewCreated: (final WebViewController webViewController) async {
         _controller.complete(webViewController);
-        if (widget.proxy) {
-          final host = _proxy.address.address;
-          final port = _proxy.port;
-          print(
-              '>>>> ModelViewer initializing... (proxy at $host:$port)'); // DEBUG
-          await webViewController.loadUrl('http://$host:$port/');
-        } else {
-          print('>>>> ModelViewer initializing...'); // DEBUG
-          final bundle = DefaultAssetBundle.of(context);
-          final themeData = Theme.of(context);
-          final htmlTemplate = await bundle
-              .loadString('packages/model_viewer/etc/assets/template.html');
-          final html = _buildHTML(themeData, htmlTemplate);
-          final contentBase64 = base64Encode(const Utf8Encoder().convert(html));
-          await webViewController
-              .loadUrl('data:text/html;base64,$contentBase64');
-          final js = await bundle
-              .loadString('packages/model_viewer/etc/assets/model-viewer.js');
-          await webViewController.evaluateJavascript(js);
-        }
+        final host = _proxy.address.address;
+        final port = _proxy.port;
+        final url = "http://$host:$port/";
+        print('>>>> ModelViewer initializing... <$url>'); // DEBUG
+        await webViewController.loadUrl(url);
       },
       navigationDelegate: (final NavigationRequest navigation) async {
         //print('>>>> ModelViewer wants to load: <${navigation.url}>'); // DEBUG
@@ -173,12 +159,11 @@ class _ModelViewerState extends State<ModelViewer> {
     );
   }
 
-  String _buildHTML(final ThemeData themeData, final String htmlTemplate) {
+  String _buildHTML(final String htmlTemplate) {
     return HTMLBuilder.build(
       htmlTemplate: htmlTemplate,
-      backgroundColor:
-          widget.backgroundColor ?? themeData?.scaffoldBackgroundColor,
-      src: widget.proxy ? '/model' : widget.src,
+      backgroundColor: widget.backgroundColor,
+      src: '/model',
       alt: widget.alt,
       ar: widget.ar,
       arModes: widget.arModes,
@@ -192,20 +177,18 @@ class _ModelViewerState extends State<ModelViewer> {
   }
 
   Future<void> _initProxy() async {
-    final url = widget.src;
+    final url = Uri.parse(widget.src);
     _proxy = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
     _proxy.listen((final HttpRequest request) async {
-      print("${request.method} ${request.uri}"); // DEBUG
+      //print("${request.method} ${request.uri}"); // DEBUG
+      //print(request.headers); // DEBUG
       final response = request.response;
 
       switch (request.uri.path) {
         case '/':
-          print(request.headers); // DEBUG
           final htmlTemplate = await rootBundle
               .loadString('packages/model_viewer/etc/assets/template.html');
-          final html = _buildHTML(null, htmlTemplate) +
-              "<script src=\"/model-viewer.js\"></script>";
-          print(html);
+          final html = _buildHTML(htmlTemplate);
           response
             ..statusCode = HttpStatus.ok
             ..headers.add("Content-Type", "text/html")
@@ -214,7 +197,6 @@ class _ModelViewerState extends State<ModelViewer> {
           break;
 
         case '/model-viewer.js':
-          print(request.headers); // DEBUG
           final code = await rootBundle
               .loadString('packages/model_viewer/etc/assets/model-viewer.js');
           response
@@ -226,8 +208,20 @@ class _ModelViewerState extends State<ModelViewer> {
           break;
 
         case '/model':
-          print(request.headers); // DEBUG
-          await response.redirect(Uri.parse(url)); // TODO: proxy the resource
+          if (url.isAbsolute && !url.isScheme("file")) {
+            await response.redirect(url); // TODO: proxy the resource
+          } else {
+            final data = await (url.isScheme("file")
+                ? _readFile(url.path)
+                : _readAsset(url.path));
+            response
+              ..statusCode = HttpStatus.ok
+              ..headers.add("Content-Type", "application/octet-stream")
+              ..headers.add("Content-Length", data.lengthInBytes.toString())
+              ..headers.add("Access-Control-Allow-Origin", "*")
+              ..add(data);
+            await response.close();
+          }
           break;
 
         case '/favicon.ico':
@@ -240,5 +234,14 @@ class _ModelViewerState extends State<ModelViewer> {
           break;
       }
     });
+  }
+
+  Future<Uint8List> _readAsset(final String key) async {
+    final data = await rootBundle.load(key);
+    return data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+  }
+
+  Future<Uint8List> _readFile(final String path) async {
+    return await File(path).readAsBytes();
   }
 }
