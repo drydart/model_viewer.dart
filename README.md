@@ -33,13 +33,16 @@ dependencies:
   model_viewer: ^0.7.0
 ```
 
-### `Info.plist` (iOS only)
+### `ios/Runner/Info.plist` (iOS only)
 
 To use this widget on iOS, you need to opt-in to the embedded views preview
 by adding a boolean property to your app's `Info.plist` file, with the key
-`io.flutter.embedded_views_preview` and the value `YES`. See the
-[WebView](https://pub.dev/packages/webview_flutter) plugin's documentation
-for more information.
+`io.flutter.embedded_views_preview` and the value `YES`:
+
+```xml
+<key>io.flutter.embedded_views_preview</key>
+<true/>
+```
 
 ## Features
 
@@ -86,6 +89,39 @@ class MyApp extends StatelessWidget {
 }
 ```
 
+### Loading a bundled Flutter asset
+
+```dart
+class MyApp extends StatelessWidget {
+// ...
+          src: 'assets/MyModel.glb',
+// ...
+}
+```
+
+### Loading a model from the file system
+
+```dart
+class MyApp extends StatelessWidget {
+// ...
+          src: 'file:///path/to/MyModel.glb',
+// ...
+}
+```
+
+### Loading a model from the web
+
+```dart
+class MyApp extends StatelessWidget {
+// ...
+          src: 'https://modelviewer.dev/shared-assets/models/Astronaut.glb',
+// ...
+}
+```
+
+Note that due to browsers' [CORS] security restrictions, the model file
+*must* be served with a `Access-Control-Allow-Origin: *` HTTP header.
+
 ## Frequently Asked Questions
 
 ### Q: Why does the example app just show a blank screen?
@@ -94,34 +130,26 @@ class MyApp extends StatelessWidget {
 too old and does not support the features that Model Viewer needs. For example,
 the stock Chrome version on the Android 10 emulator is too old and will display
 a blank screen; it must be upgraded from the Play Store in order to use this
-package. See [google/model-viewer#1109][].
+package. See [google/model-viewer#1109].
 
 ### Q: Why doesn't my 3D model load and/or render?
 
 **A:** There are several reasons why your model URL could fail to load and
 render:
 
-1. It might not be possible to load the model URL due to [CORS][] security
+1. It might not be possible to load the model URL due to [CORS] security
    restrictions. The server hosting the model file *must* send appropriate
    CORS response headers for Model Viewer to be able to load the file.
-   See [google/model-viewer#1015][].
+   See [google/model-viewer#1015].
 
 2. It might not be possible to parse the provided glTF or GLB file.
    Some tools can produce invalid files when exporting glTF. Always
-   run your model files through the [glTF Validator][] to check for this.
+   run your model files through the [glTF Validator] to check for this.
 
 3. The platform browser might not support the features that Model Viewer
-   needs. See [google/model-viewer#1109][].
+   needs. See [google/model-viewer#1109].
 
 [CORS]:                     https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
 [glTF Validator]:           https://github.khronos.org/glTF-Validator/
 [google/model-viewer#1015]: https://github.com/google/model-viewer/issues/1015
 [google/model-viewer#1109]: https://github.com/google/model-viewer/issues/1109
-
-### Q: How do I load a local asset instead of loading a URL?
-
-**A:** This is not supported as yet. Due to CORS security restrictions, the
-model file *cannot* be loaded from a `file://` URL. That means local assets
-must be served from a `http://localhost:$PORT` web server. There are plans to
-implement a built-in proxy that will enable this in a future version of this
-package. (Do get in touch if your company would like to sponsor this work.)

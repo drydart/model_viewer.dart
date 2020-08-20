@@ -35,8 +35,18 @@ class ModelViewer extends StatefulWidget {
   /// The theme's [ThemeData.scaffoldBackgroundColor] by default.
   final Color backgroundColor;
 
-  /// The URL to the 3D model. This parameter is required. Only glTF/GLB models
-  /// are supported.
+  /// The URL or path to the 3D model. This parameter is required.
+  /// Only glTF/GLB models are supported.
+  ///
+  /// The parameter value must conform to the following:
+  ///
+  /// - `http://` and `https://` for HTTP(S) URLs
+  ///   (for example, `https://modelviewer.dev/shared-assets/models/Astronaut.glb`)
+  ///
+  /// - `file://` for local files
+  ///
+  /// - a relative pathname for Flutter app assets
+  ///   (for example, `assets/MyModel.glb`)
   final String src;
 
   /// Configures the model with custom text that will be used to describe the
