@@ -30,7 +30,7 @@ Android and iOS, with [a recent system browser version](https://modelviewer.dev/
 
 ```yaml
 dependencies:
-  model_viewer: ^0.7.0
+  model_viewer: ^0.8.0
 ```
 
 ### `ios/Runner/Info.plist` (iOS only)

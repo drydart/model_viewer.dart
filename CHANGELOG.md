@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Support for loading bundled asset files
 - Support for loading local files from `file://` URLs
-- Support for a `localhost` HTTP server and proxy
+- Implemented a `localhost` HTTP server and proxy
 
 ## [0.7.0] - 2020-08-18
 
