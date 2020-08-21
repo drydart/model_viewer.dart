@@ -157,10 +157,12 @@ instructions earlier in this document. See also [#7].
 ### Q: Why does the example app just show a blank screen?
 
 **A:** Most likely, the platform browser version on your device or emulator is
-too old and does not support the features that Model Viewer needs. For example,
-the stock Chrome version on the Android 10 emulator is too old and will display
-a blank screen; it must be upgraded from the Play Store in order to use this
-package. See [google/model-viewer#1109].
+too old and does not support the features that Model Viewer needs.
+
+For example, the stock Chrome version on the Android 10 emulator is too old
+and will display a blank screen; it must be upgraded from the Play Store in
+order to use this package. (The stock Chrome version on the Android 11
+emulator works fine, however.) See [google/model-viewer#1109].
 
 ### Q: Why doesn't my 3D model load and/or render?
 
