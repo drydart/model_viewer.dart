@@ -1,6 +1,7 @@
 /* This is free and unencumbered software released into the public domain. */
 
 import 'dart:async' show Completer;
+import 'dart:convert' show utf8;
 import 'dart:io'
     show File, HttpRequest, HttpServer, HttpStatus, InternetAddress, Platform;
 import 'dart:typed_data' show Uint8List;
@@ -196,24 +197,27 @@ class _ModelViewerState extends State<ModelViewer> {
 
       switch (request.uri.path) {
         case '/':
+        case '/index.html':
           final htmlTemplate = await rootBundle
               .loadString('packages/model_viewer/etc/assets/template.html');
-          final html = _buildHTML(htmlTemplate);
+          final html = utf8.encode(_buildHTML(htmlTemplate));
           response
             ..statusCode = HttpStatus.ok
-            ..headers.add("Content-Type", "text/html")
-            ..write(html);
+            ..headers.add("Content-Type", "text/html;charset=UTF-8")
+            ..headers.add("Content-Length", html.length.toString())
+            ..add(html);
           await response.close();
           break;
 
         case '/model-viewer.js':
-          final code = await rootBundle
-              .loadString('packages/model_viewer/etc/assets/model-viewer.js');
+          final code = await _readAsset(
+              'packages/model_viewer/etc/assets/model-viewer.js');
           response
             ..statusCode = HttpStatus.ok
             ..headers
                 .add("Content-Type", "application/javascript;charset=UTF-8")
-            ..write(code);
+            ..headers.add("Content-Length", code.lengthInBytes.toString())
+            ..add(code);
           await response.close();
           break;
 
@@ -236,10 +240,12 @@ class _ModelViewerState extends State<ModelViewer> {
 
         case '/favicon.ico':
         default:
+          final text = utf8.encode("Resource '${request.uri}' not found");
           response
             ..statusCode = HttpStatus.notFound
-            ..headers.add("Content-Type", "text/plain")
-            ..write("Resource '${request.uri}' not found");
+            ..headers.add("Content-Type", "text/plain;charset=UTF-8")
+            ..headers.add("Content-Length", text.length.toString())
+            ..add(text);
           await response.close();
           break;
       }
