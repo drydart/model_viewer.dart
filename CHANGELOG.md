@@ -9,7 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Set `android:usesCleartextTraffic="true"` for Android 9+ in the example
+  app to fix `net::ERR_CLEARTEXT_NOT_PERMITTED`. ([#7])
 - Improved the reliability of the `localhost` HTTP proxy.
+
+### Added
+
+- Documented `android:usesCleartextTraffic="true"` in the README. ([#7])
 
 ## [0.8.0] - 2020-08-20
 
@@ -59,3 +65,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [0.5.0]: https://github.com/drydart/model_viewer.dart/compare/0.4.0...0.5.0
 
 [#4]:    https://github.com/drydart/model_viewer.dart/issues/4
+[#7]:    https://github.com/drydart/model_viewer.dart/issues/7

@@ -33,11 +33,36 @@ dependencies:
   model_viewer: ^0.8.1
 ```
 
-### `ios/Runner/Info.plist` (iOS only)
+### `AndroidManifest.xml` (Android 9+ only)
+
+To use this widget on Android 9+ devices, your app must be permitted to make
+an HTTP connection to `http://localhost:XXXXX`. Android 9 (API level 28)
+changed the default for [`android:usesCleartextTraffic`] from `true` to
+`false`, so you will need to configure your app's
+`android/app/src/main/AndroidManifest.xml` as follows:
+
+```diff
+--- a/example/android/app/src/main/AndroidManifest.xml
++++ b/example/android/app/src/main/AndroidManifest.xml
+@@ -8,7 +8,8 @@
+     <application
+         android:name="io.flutter.app.FlutterApplication"
+         android:label="model_viewer_example"
+-        android:icon="@mipmap/ic_launcher">
++        android:icon="@mipmap/ic_launcher"
++        android:usesCleartextTraffic="true">
+         <activity
+             android:name=".MainActivity"
+             android:launchMode="singleTop"
+```
+
+This does not affect Android 8 and earlier. See [#7] for more information.
+
+### `Info.plist` (iOS only)
 
 To use this widget on iOS, you need to opt-in to the embedded views preview
-by adding a boolean property to your app's `Info.plist` file, with the key
-`io.flutter.embedded_views_preview` and the value `YES`:
+by adding a boolean property to your app's `ios/Runner/Info.plist` file, with
+the key `io.flutter.embedded_views_preview` and the value `YES`:
 
 ```xml
 <key>io.flutter.embedded_views_preview</key>
@@ -124,6 +149,11 @@ Note that due to browsers' [CORS] security restrictions, the model file
 
 ## Frequently Asked Questions
 
+### Q: Why do I get the error `net::ERR_CLEARTEXT_NOT_PERMITTED`?
+
+You didn't configure your `AndroidManifest.xml` as per the installation
+instructions earlier in this document. See also [#7].
+
 ### Q: Why does the example app just show a blank screen?
 
 **A:** Most likely, the platform browser version on your device or emulator is
@@ -149,7 +179,9 @@ render:
 3. The platform browser might not support the features that Model Viewer
    needs. See [google/model-viewer#1109].
 
+[#7]:                       https://github.com/drydart/model_viewer.dart/issues/7
 [CORS]:                     https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
 [glTF Validator]:           https://github.khronos.org/glTF-Validator/
 [google/model-viewer#1015]: https://github.com/google/model-viewer/issues/1015
 [google/model-viewer#1109]: https://github.com/google/model-viewer/issues/1109
+[`android:usesCleartextTraffic`]: https://developer.android.com/guide/topics/manifest/application-element#usesCleartextTraffic
