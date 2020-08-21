@@ -18,7 +18,7 @@ import 'html_builder.dart';
 class ModelViewer extends StatefulWidget {
   ModelViewer(
       {Key key,
-      this.backgroundColor,
+      this.backgroundColor = Colors.white,
       @required this.src,
       this.alt,
       this.ar,
