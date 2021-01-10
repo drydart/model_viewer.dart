@@ -12,6 +12,7 @@ import 'package:flutter_android/android_content.dart' as android_content;
 import 'package:webview_flutter/platform_interface.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import 'controller.dart';
 import 'html_builder.dart';
 
 /// Flutter widget for rendering interactive 3D models.
@@ -28,6 +29,8 @@ class ModelViewer extends StatefulWidget {
       this.autoRotateDelay,
       this.autoPlay,
       this.cameraControls,
+      this.enableColorChange,
+      this.colorController,
       this.iosSrc})
       : super(key: key);
 
@@ -66,6 +69,15 @@ class ModelViewer extends StatefulWidget {
   /// Defaults to "auto" which allows the model to be resized.
   final String arScale;
 
+  /// Enable the ability to change the color of the model with the [ModelViewerColorController]
+  /// If this value is set to true, it's possible to set the color of the model.
+  final bool enableColorChange;
+
+  /// Controller to set the color of the model
+  /// Call the Function [ModelViewerColorController.changeColor(colorString)]
+  /// to set a color by an given colorString
+  ModelViewerColorController colorController;
+
   /// Enables the auto-rotation of the model.
   final bool autoRotate;
 
@@ -98,6 +110,10 @@ class _ModelViewerState extends State<ModelViewer> {
   @override
   void initState() {
     super.initState();
+    var _colorController = widget.colorController;
+    if (_colorController != null) {
+      _colorController.changeColor = _changeColor;
+    }
     _initProxy();
   }
 
@@ -170,8 +186,21 @@ class _ModelViewerState extends State<ModelViewer> {
     );
   }
 
+  Future<String> _changeColor(String color) async {
+    var c = Completer<String>();
+    var webviewcontroller = await _controller.future;
+    await webviewcontroller
+        .evaluateJavascript('changeColor("$color")')
+        .then((result) {
+      c.complete(result);
+    }).catchError((onError) {
+      c.completeError(onError.toString());
+    });
+    return c.future;
+  }
+
   String _buildHTML(final String htmlTemplate) {
-    return HTMLBuilder.build(
+    var htmlBuild = HTMLBuilder.build(
       htmlTemplate: htmlTemplate,
       backgroundColor: widget.backgroundColor,
       src: '/model',
@@ -183,8 +212,10 @@ class _ModelViewerState extends State<ModelViewer> {
       autoRotateDelay: widget.autoRotateDelay,
       autoPlay: widget.autoPlay,
       cameraControls: widget.cameraControls,
+      enableColorChange: widget.enableColorChange,
       iosSrc: widget.iosSrc,
     );
+    return htmlBuild;
   }
 
   Future<void> _initProxy() async {
