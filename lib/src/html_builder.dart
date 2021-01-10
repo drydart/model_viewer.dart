@@ -19,6 +19,7 @@ abstract class HTMLBuilder {
       final int autoRotateDelay,
       final bool autoPlay,
       final bool cameraControls,
+      final bool enableColorChange,
       final String iosSrc}) {
     final html = StringBuffer(htmlTemplate);
     html.write('<model-viewer');
@@ -64,6 +65,11 @@ abstract class HTMLBuilder {
     if (iosSrc != null) {
       html.write(' ios-src="${htmlEscape.convert(iosSrc)}"');
     }
+
+    if (enableColorChange ?? false) {
+      html.write(' id="color"');
+    }
+
     // TODO: max-camera-orbit
     // TODO: max-field-of-view
     // TODO: min-camera-orbit
@@ -75,6 +81,26 @@ abstract class HTMLBuilder {
     // TODO: shadow-intensity
     // TODO: shadow-softness
     html.writeln('></model-viewer>');
+
+    if (enableColorChange ?? false) {
+      html.write(_buildColorChangeJSFunction());
+    }
+
+    print(html.toString());
     return html.toString();
+  }
+
+  static String _buildColorChangeJSFunction() {
+    return '''
+    <script type="text/javascript">
+      function changeColor(colorString) {
+        const modelViewerColor = document.querySelector("model-viewer#color");
+        const color = colorString.split(',')
+                .map(numberString => parseFloat(numberString));
+        const [material] = modelViewerColor.model.materials;
+        material.pbrMetallicRoughness.setBaseColorFactor(color);
+      }
+    </script>
+    ''';
   }
 }
