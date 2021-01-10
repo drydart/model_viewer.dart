@@ -85,8 +85,7 @@ abstract class HTMLBuilder {
     if (enableColorChange ?? false) {
       html.write(_buildColorChangeJSFunction());
     }
-
-    print(html.toString());
+    
     return html.toString();
   }
 

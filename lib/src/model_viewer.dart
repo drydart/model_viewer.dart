@@ -200,7 +200,7 @@ class _ModelViewerState extends State<ModelViewer> {
   }
 
   String _buildHTML(final String htmlTemplate) {
-    var htmlBuild = HTMLBuilder.build(
+    return HTMLBuilder.build(
       htmlTemplate: htmlTemplate,
       backgroundColor: widget.backgroundColor,
       src: '/model',
@@ -215,7 +215,6 @@ class _ModelViewerState extends State<ModelViewer> {
       enableColorChange: widget.enableColorChange,
       iosSrc: widget.iosSrc,
     );
-    return htmlBuild;
   }
 
   Future<void> _initProxy() async {
