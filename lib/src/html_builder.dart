@@ -85,7 +85,9 @@ abstract class HTMLBuilder {
     if (enableColorChange ?? false) {
       html.write(_buildColorChangeJSFunction());
     }
-    
+
+    html.write(_buildModelVisibilityEventJSFunction());
+
     return html.toString();
   }
 
@@ -99,6 +101,17 @@ abstract class HTMLBuilder {
         const [material] = modelViewerColor.model.materials;
         material.pbrMetallicRoughness.setBaseColorFactor(color);
       }
+    </script>
+    ''';
+  }
+
+  static String _buildModelVisibilityEventJSFunction() {
+    return '''
+    <script type="text/javascript">
+        const modelViewerElement = document.querySelector("model-viewer");
+        modelViewerElement.addEventListener('model-visibility', (event) => {
+            messageIsVisibile.postMessage(event.detail.visible);
+        });
     </script>
     ''';
   }

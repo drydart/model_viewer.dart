@@ -35,6 +35,7 @@ class ModelViewer extends StatefulWidget {
       this.onModelViewCreated,
       this.onModelViewError,
       this.onModelViewFinished,
+      this.onModelIsVisisble,
       this.onModelViewStarted})
       : super(key: key);
 
@@ -110,8 +111,12 @@ class ModelViewer extends StatefulWidget {
   /// Invoked when the model viewer has finished loading the url.
   ///
   /// Please note: This function is invoked when the url has finished loading,
-  /// but it doesn't represents the finished loading process of the model view.
+  /// but it doesn't represents the finished loading process of the model visibility.
   final VoidCallback onModelViewFinished;
+
+  /// Invoked when the model viewer has loaded the model and the model is visibile.
+  /// See: https://modelviewer.dev/docs/#entrydocs-loading-events-modelVisibility
+  final VoidCallback onModelIsVisisble;
 
   /// Invoked when the model viewer has failed to load the resource.
   final ValueChanged<String> onModelViewError;
@@ -156,6 +161,17 @@ class _ModelViewerState extends State<ModelViewer> {
     return WebView(
       initialUrl: null,
       javascriptMode: JavascriptMode.unrestricted,
+      javascriptChannels: Set.from({
+        JavascriptChannel(
+            name: 'messageIsVisibile',
+            onMessageReceived: (JavascriptMessage message) {
+              if (widget.onModelIsVisisble != null) {
+                if (message.message == 'true') {
+                  widget.onModelIsVisisble();
+                }
+              }
+            }),
+      }),
       initialMediaPlaybackPolicy: AutoMediaPlaybackPolicy.always_allow,
       onWebViewCreated: (final WebViewController webViewController) async {
         _controller.complete(webViewController);
@@ -163,9 +179,11 @@ class _ModelViewerState extends State<ModelViewer> {
         final port = _proxy.port;
         final url = "http://$host:$port/";
         print('>>>> ModelViewer initializing... <$url>'); // DEBUG
-        await webViewController
-            .loadUrl(url)
-            .then((value) => widget.onModelViewCreated());
+        await webViewController.loadUrl(url).then((value) {
+          if (widget.onModelViewCreated != null) {
+            widget.onModelViewCreated();
+          }
+        });
       },
       navigationDelegate: (final NavigationRequest navigation) async {
         //print('>>>> ModelViewer wants to load: <${navigation.url}>'); // DEBUG
@@ -195,15 +213,22 @@ class _ModelViewerState extends State<ModelViewer> {
         return NavigationDecision.prevent;
       },
       onPageStarted: (final String url) {
-        widget.onModelViewStarted();
+        if (widget.onModelViewStarted != null) {
+          widget.onModelViewStarted();
+        }
         //print('>>>> ModelViewer began loading: <$url>'); // DEBUG
       },
       onPageFinished: (final String url) {
-        widget.onModelViewFinished();
+        if (widget.onModelViewFinished != null) {
+          widget.onModelViewFinished();
+        }
         //print('>>>> ModelViewer finished loading: <$url>'); // DEBUG
       },
       onWebResourceError: (final WebResourceError error) {
-        widget.onModelViewError(error.description);
+        if (widget.onModelViewError != null) {
+          widget.onModelViewError(error.description);
+        }
+
         print(
             '>>>> ModelViewer failed to load: ${error.description} (${error.errorType} ${error.errorCode})'); // DEBUG
       },
