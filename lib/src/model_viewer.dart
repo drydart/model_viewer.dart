@@ -31,7 +31,11 @@ class ModelViewer extends StatefulWidget {
       this.cameraControls,
       this.enableColorChange,
       this.colorController,
-      this.iosSrc})
+      this.iosSrc,
+      this.onModelViewCreated,
+      this.onModelViewError,
+      this.onModelViewFinished,
+      this.onModelViewStarted})
       : super(key: key);
 
   /// The background color for the model viewer.
@@ -97,6 +101,21 @@ class ModelViewer extends StatefulWidget {
   /// via AR Quick Look.
   final String iosSrc;
 
+  /// Invoked once when the model viewer is created.
+  final VoidCallback onModelViewCreated;
+
+  /// Invoked when the model viewer has finished loading the url.
+  final VoidCallback onModelViewStarted;
+
+  /// Invoked when the model viewer has finished loading the url.
+  ///
+  /// Please note: This function is invoked when the url has finished loading,
+  /// but it doesn't represents the finished loading process of the model view.
+  final VoidCallback onModelViewFinished;
+
+  /// Invoked when the model viewer has failed to load the resource.
+  final ValueChanged<String> onModelViewError;
+
   @override
   State<ModelViewer> createState() => _ModelViewerState();
 }
@@ -144,7 +163,9 @@ class _ModelViewerState extends State<ModelViewer> {
         final port = _proxy.port;
         final url = "http://$host:$port/";
         print('>>>> ModelViewer initializing... <$url>'); // DEBUG
-        await webViewController.loadUrl(url);
+        await webViewController
+            .loadUrl(url)
+            .then((value) => widget.onModelViewCreated());
       },
       navigationDelegate: (final NavigationRequest navigation) async {
         //print('>>>> ModelViewer wants to load: <${navigation.url}>'); // DEBUG
@@ -174,12 +195,15 @@ class _ModelViewerState extends State<ModelViewer> {
         return NavigationDecision.prevent;
       },
       onPageStarted: (final String url) {
+        widget.onModelViewStarted();
         //print('>>>> ModelViewer began loading: <$url>'); // DEBUG
       },
       onPageFinished: (final String url) {
+        widget.onModelViewFinished();
         //print('>>>> ModelViewer finished loading: <$url>'); // DEBUG
       },
       onWebResourceError: (final WebResourceError error) {
+        widget.onModelViewError(error.description);
         print(
             '>>>> ModelViewer failed to load: ${error.description} (${error.errorType} ${error.errorCode})'); // DEBUG
       },
