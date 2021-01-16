@@ -11,3 +11,4 @@
 library model_viewer;
 
 export 'src/model_viewer.dart';
+export 'src/controller.dart';

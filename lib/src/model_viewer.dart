@@ -12,6 +12,7 @@ import 'package:flutter_android/android_content.dart' as android_content;
 import 'package:webview_flutter/platform_interface.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import 'controller.dart';
 import 'html_builder.dart';
 
 /// Flutter widget for rendering interactive 3D models.
@@ -28,7 +29,14 @@ class ModelViewer extends StatefulWidget {
       this.autoRotateDelay,
       this.autoPlay,
       this.cameraControls,
-      this.iosSrc})
+      this.enableColorChange,
+      this.colorController,
+      this.iosSrc,
+      this.onModelViewCreated,
+      this.onModelViewError,
+      this.onModelViewFinished,
+      this.onModelIsVisisble,
+      this.onModelViewStarted})
       : super(key: key);
 
   /// The background color for the model viewer.
@@ -66,6 +74,15 @@ class ModelViewer extends StatefulWidget {
   /// Defaults to "auto" which allows the model to be resized.
   final String arScale;
 
+  /// Enable the ability to change the color of the model with the [ModelViewerColorController]
+  /// If this value is set to true, it's possible to set the color of the model.
+  final bool enableColorChange;
+
+  /// Controller to set the color of the model
+  /// Call the Function [ModelViewerColorController.changeColor(colorString)]
+  /// to set a color by an given colorString
+  ModelViewerColorController colorController;
+
   /// Enables the auto-rotation of the model.
   final bool autoRotate;
 
@@ -85,6 +102,25 @@ class ModelViewer extends StatefulWidget {
   /// via AR Quick Look.
   final String iosSrc;
 
+  /// Invoked once when the model viewer is created.
+  final VoidCallback onModelViewCreated;
+
+  /// Invoked when the model viewer has finished loading the url.
+  final VoidCallback onModelViewStarted;
+
+  /// Invoked when the model viewer has finished loading the url.
+  ///
+  /// Please note: This function is invoked when the url has finished loading,
+  /// but it doesn't represents the finished loading process of the model visibility.
+  final VoidCallback onModelViewFinished;
+
+  /// Invoked when the model viewer has loaded the model and the model is visibile.
+  /// See: https://modelviewer.dev/docs/#entrydocs-loading-events-modelVisibility
+  final VoidCallback onModelIsVisisble;
+
+  /// Invoked when the model viewer has failed to load the resource.
+  final ValueChanged<String> onModelViewError;
+
   @override
   State<ModelViewer> createState() => _ModelViewerState();
 }
@@ -98,6 +134,10 @@ class _ModelViewerState extends State<ModelViewer> {
   @override
   void initState() {
     super.initState();
+    var _colorController = widget.colorController;
+    if (_colorController != null) {
+      _colorController.changeColor = _changeColor;
+    }
     _initProxy();
   }
 
@@ -121,6 +161,17 @@ class _ModelViewerState extends State<ModelViewer> {
     return WebView(
       initialUrl: null,
       javascriptMode: JavascriptMode.unrestricted,
+      javascriptChannels: Set.from({
+        JavascriptChannel(
+            name: 'messageIsVisibile',
+            onMessageReceived: (JavascriptMessage message) {
+              if (widget.onModelIsVisisble != null) {
+                if (message.message == 'true') {
+                  widget.onModelIsVisisble();
+                }
+              }
+            }),
+      }),
       initialMediaPlaybackPolicy: AutoMediaPlaybackPolicy.always_allow,
       onWebViewCreated: (final WebViewController webViewController) async {
         _controller.complete(webViewController);
@@ -128,7 +179,11 @@ class _ModelViewerState extends State<ModelViewer> {
         final port = _proxy.port;
         final url = "http://$host:$port/";
         print('>>>> ModelViewer initializing... <$url>'); // DEBUG
-        await webViewController.loadUrl(url);
+        await webViewController.loadUrl(url).then((value) {
+          if (widget.onModelViewCreated != null) {
+            widget.onModelViewCreated();
+          }
+        });
       },
       navigationDelegate: (final NavigationRequest navigation) async {
         //print('>>>> ModelViewer wants to load: <${navigation.url}>'); // DEBUG
@@ -158,16 +213,39 @@ class _ModelViewerState extends State<ModelViewer> {
         return NavigationDecision.prevent;
       },
       onPageStarted: (final String url) {
+        if (widget.onModelViewStarted != null) {
+          widget.onModelViewStarted();
+        }
         //print('>>>> ModelViewer began loading: <$url>'); // DEBUG
       },
       onPageFinished: (final String url) {
+        if (widget.onModelViewFinished != null) {
+          widget.onModelViewFinished();
+        }
         //print('>>>> ModelViewer finished loading: <$url>'); // DEBUG
       },
       onWebResourceError: (final WebResourceError error) {
+        if (widget.onModelViewError != null) {
+          widget.onModelViewError(error.description);
+        }
+
         print(
             '>>>> ModelViewer failed to load: ${error.description} (${error.errorType} ${error.errorCode})'); // DEBUG
       },
     );
+  }
+
+  Future<String> _changeColor(String color) async {
+    var c = Completer<String>();
+    var webviewcontroller = await _controller.future;
+    await webviewcontroller
+        .evaluateJavascript('changeColor("$color")')
+        .then((result) {
+      c.complete(result);
+    }).catchError((onError) {
+      c.completeError(onError.toString());
+    });
+    return c.future;
   }
 
   String _buildHTML(final String htmlTemplate) {
@@ -183,6 +261,7 @@ class _ModelViewerState extends State<ModelViewer> {
       autoRotateDelay: widget.autoRotateDelay,
       autoPlay: widget.autoPlay,
       cameraControls: widget.cameraControls,
+      enableColorChange: widget.enableColorChange,
       iosSrc: widget.iosSrc,
     );
   }
