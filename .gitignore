@@ -7,9 +7,6 @@
 # Editor backup files
 *~
 
-# Pandoc outputs
-*.html
-
 # Dart artifacts
 .dart_tool/
 .packages
