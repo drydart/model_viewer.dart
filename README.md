@@ -1,9 +1,5 @@
 # 3D Model Viewer for Flutter
-
-[![Project license](https://img.shields.io/badge/license-Public%20Domain-blue.svg)](https://unlicense.org)
-[![Dart compatibility](https://img.shields.io/badge/dart-2.8%2B-blue)](https://pub.dev/packages/model_viewer)
-[![Pub package](https://img.shields.io/pub/v/model_viewer.svg)](https://pub.dev/packages/model_viewer)
-[![Dartdoc reference](https://img.shields.io/badge/dartdoc-reference-blue.svg)](https://pub.dev/documentation/model_viewer/latest/)
+https://pub.dev/packages/model_viewer - Fork from a package that is discontinued. 
 
 This is a [Flutter](https://flutter.dev) widget for rendering interactive
 3D models in the [glTF](https://www.khronos.org/gltf/) and
