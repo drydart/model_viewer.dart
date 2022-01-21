@@ -198,7 +198,7 @@ class _ModelViewerState extends State<ModelViewer> {
         case '/':
         case '/index.html':
           final htmlTemplate = await rootBundle
-              .loadString('packages/model_viewer/etc/assets/template.html');
+              .loadString('packages/model_viewer_plus/etc/assets/template.html');
           final html = utf8.encode(_buildHTML(htmlTemplate));
           response
             ..statusCode = HttpStatus.ok
@@ -210,7 +210,7 @@ class _ModelViewerState extends State<ModelViewer> {
 
         case '/model-viewer.js':
           final code = await _readAsset(
-              'packages/model_viewer/etc/assets/model-viewer.js');
+              'packages/model_viewer_plus/etc/assets/model-viewer.js');
           response
             ..statusCode = HttpStatus.ok
             ..headers

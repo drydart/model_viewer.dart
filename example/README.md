@@ -10,4 +10,4 @@ Demonstrates how to use the `ModelViewer` widget for Flutter.
 
 ## Screenshot
 
-![Screenshot 1](https://raw.githubusercontent.com/drydart/model_viewer.dart/master/example/flutter_01.png)
+![Screenshot 1](https://raw.githubusercontent.com/drydart/model_viewer_plus.dart/master/example/flutter_01.png)

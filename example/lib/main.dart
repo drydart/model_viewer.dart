@@ -1,7 +1,7 @@
 /* This is free and unencumbered software released into the public domain. */
 
 import 'package:flutter/material.dart';
-import 'package:model_viewer/model_viewer.dart';
+import 'package:model_viewer_plus/model_viewer_plus.dart';
 
 void main() => runApp(MyApp());
 

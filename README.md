@@ -1,5 +1,5 @@
 # 3D Model Viewer for Flutter
-https://pub.dev/packages/model_viewer - Fork from a package that is discontinued. 
+https://pub.dev/packages/model_viewer_plus - Fork from a package that is discontinued. 
 
 This is a [Flutter](https://flutter.dev) widget for rendering interactive
 3D models in the [glTF](https://www.khronos.org/gltf/) and
@@ -10,7 +10,7 @@ web component in a [WebView](https://pub.dev/packages/webview_flutter).
 
 ## Screenshot
 
-<img alt="Screenshot of astronaut model" src="https://raw.githubusercontent.com/drydart/model_viewer.dart/master/example/flutter_01.png" width="480"/>
+<img alt="Screenshot of astronaut model" src="https://raw.githubusercontent.com/drydart/model_viewer_plus.dart/master/example/flutter_01.png" width="480"/>
 
 ## Prerequisites
 
@@ -26,7 +26,7 @@ Android and iOS, with [a recent system browser version](https://modelviewer.dev/
 
 ```yaml
 dependencies:
-  model_viewer: ^0.8.1
+  model_viewer_plus: ^0.8.1
 ```
 
 ### `AndroidManifest.xml` (Android 9+ only)
@@ -43,7 +43,7 @@ changed the default for [`android:usesCleartextTraffic`] from `true` to
 @@ -8,7 +8,8 @@
      <application
          android:name="io.flutter.app.FlutterApplication"
-         android:label="model_viewer_example"
+         android:label="model_viewer_plus_example"
 -        android:icon="@mipmap/ic_launcher">
 +        android:icon="@mipmap/ic_launcher"
 +        android:usesCleartextTraffic="true">
@@ -85,7 +85,7 @@ the key `io.flutter.embedded_views_preview` and the value `YES`:
 ### Importing the library
 
 ```dart
-import 'package:model_viewer/model_viewer.dart';
+import 'package:model_viewer_plus/model_viewer_plus.dart';
 ```
 
 ### Creating a `ModelViewer` widget
@@ -177,7 +177,7 @@ render:
 3. The platform browser might not support the features that Model Viewer
    needs. See [google/model-viewer#1109].
 
-[#7]:                       https://github.com/drydart/model_viewer.dart/issues/7
+[#7]:                       https://github.com/drydart/model_viewer_plus.dart/issues/7
 [CORS]:                     https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
 [glTF Validator]:           https://github.khronos.org/glTF-Validator/
 [google/model-viewer#1015]: https://github.com/google/model-viewer/issues/1015

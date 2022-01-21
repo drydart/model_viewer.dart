@@ -62,11 +62,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Frequently asked questions and answers in the README.
 
-[0.8.1]: https://github.com/drydart/model_viewer.dart/compare/0.8.0...0.8.1
-[0.8.0]: https://github.com/drydart/model_viewer.dart/compare/0.7.0...0.8.0
-[0.7.0]: https://github.com/drydart/model_viewer.dart/compare/0.6.0...0.7.0
-[0.6.0]: https://github.com/drydart/model_viewer.dart/compare/0.5.0...0.6.0
-[0.5.0]: https://github.com/drydart/model_viewer.dart/compare/0.4.0...0.5.0
+[0.8.1]: https://github.com/drydart/model_viewer_plus.dart/compare/0.8.0...0.8.1
+[0.8.0]: https://github.com/drydart/model_viewer_plus.dart/compare/0.7.0...0.8.0
+[0.7.0]: https://github.com/drydart/model_viewer_plus.dart/compare/0.6.0...0.7.0
+[0.6.0]: https://github.com/drydart/model_viewer_plus.dart/compare/0.5.0...0.6.0
+[0.5.0]: https://github.com/drydart/model_viewer_plus.dart/compare/0.4.0...0.5.0
 
-[#4]:    https://github.com/drydart/model_viewer.dart/issues/4
-[#7]:    https://github.com/drydart/model_viewer.dart/issues/7
+[#4]:    https://github.com/drydart/model_viewer_plus.dart/issues/4
+[#7]:    https://github.com/drydart/model_viewer_plus.dart/issues/7
