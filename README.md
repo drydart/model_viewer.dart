@@ -81,7 +81,7 @@ the key `io.flutter.embedded_views_preview` and the value `YES`:
 ### Importing the library
 
 ```dart
-import 'package:model_viewer/model_viewer.dart';
+import 'package:model_viewer_plus/model_viewer.dart';
 ```
 
 ### Creating a `ModelViewer` widget
