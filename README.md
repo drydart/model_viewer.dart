@@ -12,10 +12,6 @@ web component in a [WebView](https://pub.dev/packages/webview_flutter).
 
 <img alt="Screenshot of astronaut model" src="https://raw.githubusercontent.com/drydart/model_viewer.dart/master/example/flutter_01.png" width="480"/>
 
-## Prerequisites
-
-- [Dart](https://dart.dev) 2.8+ and [Flutter](https://flutter.dev) 1.17+
-
 ## Compatibility
 
 Android and iOS, with [a recent system browser version](https://modelviewer.dev/#section-browser-support).
@@ -26,7 +22,7 @@ Android and iOS, with [a recent system browser version](https://modelviewer.dev/
 
 ```yaml
 dependencies:
-  model_viewer: ^0.8.1
+   model_viewer_plus: ^1.0.0
 ```
 
 ### `AndroidManifest.xml` (Android 9+ only)
