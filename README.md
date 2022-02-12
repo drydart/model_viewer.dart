@@ -50,6 +50,19 @@ changed the default for [`android:usesCleartextTraffic`] from `true` to
 
 This does not affect Android 8 and earlier. See [#7] for more information.
 
+### `app/build.gradle` (Android only)
+
+Change minSdkVersion to 19.
+
+    defaultConfig {
+        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+        applicationId "com.example.lab_rat"
+        minSdkVersion 19
+        targetSdkVersion flutter.targetSdkVersion
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
+    }
+
 ### `Info.plist` (iOS only)
 
 To use this widget on iOS, you need to opt-in to the embedded views preview
