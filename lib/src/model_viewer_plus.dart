@@ -173,7 +173,7 @@ class _ModelViewerState extends State<ModelViewer> {
     return HTMLBuilder.build(
       htmlTemplate: htmlTemplate,
       backgroundColor: widget.backgroundColor,
-      src: widget.src,
+      src: '/model',
       alt: widget.alt,
       ar: widget.ar,
       arModes: widget.arModes,
