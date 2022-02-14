@@ -1,5 +1,6 @@
 # 3D Model Viewer for Flutter
-https://pub.dev/packages/model_viewer - Fork from a package that is discontinued. 
+
+<https://pub.dev/packages/model_viewer> - Fork from a package that is discontinued.
 
 This is a [Flutter](https://flutter.dev) widget for rendering interactive
 3D models in the [glTF](https://www.khronos.org/gltf/) and
@@ -10,7 +11,8 @@ web component in a [WebView](https://pub.dev/packages/webview_flutter).
 
 ## Screenshot
 
-<img alt="Screenshot of astronaut model" src="https://raw.githubusercontent.com/drydart/model_viewer.dart/master/example/flutter_01.png" width="480"/>
+<img alt="Screenshot of astronaut model" src="./example/flutter_01.png" width="480"/>
+<img alt="Screenshot of astronaut model" src="./example/flutter_02.png" width="480"/>
 
 ## Compatibility
 
@@ -130,6 +132,8 @@ class MyApp extends StatelessWidget {
 ```
 
 ### Loading a model from the file system
+
+This is not avaliable on Web.
 
 ```dart
 class MyApp extends StatelessWidget {
