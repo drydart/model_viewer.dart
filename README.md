@@ -1,6 +1,6 @@
 # 3D Model Viewer for Flutter
 
-<https://pub.dev/packages/model_viewer> - Fork from a package that is discontinued.
+<https://pub.dev/packages/model_viewer> - Fork from a package that is discontinued, and add the web support for it.
 
 This is a [Flutter](https://flutter.dev) widget for rendering interactive
 3D models in the [glTF](https://www.khronos.org/gltf/) and
