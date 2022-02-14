@@ -7,6 +7,10 @@ description: >-
 homepage: https://github.com/omchiii/model_viewer_plus.dart
 repository: https://github.com/omchiii/model_viewer_plus.dart
 issue_tracker: https://github.com/omchiii/model_viewer_plus.dart/issues
+platforms:
+  android:
+  ios:
+  web:
 dependencies:
   flutter:
     sdk: flutter

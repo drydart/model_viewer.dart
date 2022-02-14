@@ -4,6 +4,8 @@ include: package:pedantic/analysis_options.1.9.0.yaml
 analyzer:
   exclude:
     - example/**.dart
+  errors:
+    undefined_prefixed_name: ignore
 linter:
   rules:
     prefer_single_quotes: false

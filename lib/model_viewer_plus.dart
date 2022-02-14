@@ -10,4 +10,8 @@
 ///    for the web component this widget embeds.
 library model_viewer_plus;
 
-export 'src/model_viewer_plus.dart';
+// export 'src/model_viewer_plus.dart';
+
+export 'src/model_viewer_plus.dart'
+    if (dart.library.io) 'src/model_viewer_plus.dart'
+    if (dart.library.js) 'src/model_viewer_plus_web.dart';
