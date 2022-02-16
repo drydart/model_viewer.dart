@@ -45,57 +45,64 @@ class ModelViewerState extends State<ModelViewer> {
 
   @override
   Widget build(final BuildContext context) {
-    return WebView(
-      initialUrl: null,
-      javascriptMode: JavascriptMode.unrestricted,
-      initialMediaPlaybackPolicy: AutoMediaPlaybackPolicy.always_allow,
-      onWebViewCreated: (final WebViewController webViewController) async {
-        _controller.complete(webViewController);
-        final host = _proxy!.address.address;
-        final port = _proxy!.port;
-        final url = "http://$host:$port/";
-        print('>>>> ModelViewer initializing... <$url>'); // DEBUG
-        await webViewController.loadUrl(url);
-      },
-      navigationDelegate: (final NavigationRequest navigation) async {
-        //print('>>>> ModelViewer wants to load: <${navigation.url}>'); // DEBUG
-        if (!Platform.isAndroid) {
-          return NavigationDecision.navigate;
-        }
-        if (!navigation.url.startsWith("intent://")) {
-          return NavigationDecision.navigate;
-        }
-        try {
-          // See: https://developers.google.com/ar/develop/java/scene-viewer
-          final intent = android_content.AndroidIntent(
-            action: "android.intent.action.VIEW", // Intent.ACTION_VIEW
-            data: "https://arvr.google.com/scene-viewer/1.0",
-            arguments: <String, dynamic>{
-              'file': widget.src,
-              'mode': 'ar_only',
-            },
-            package: "com.google.ar.core",
-            flags: <int>[
-              Flag.FLAG_ACTIVITY_NEW_TASK
-            ], // Intent.FLAG_ACTIVITY_NEW_TASK,
-          );
-          await intent.launch();
-        } catch (error) {
-          print('>>>> ModelViewer failed to launch AR: $error'); // DEBUG
-        }
-        return NavigationDecision.prevent;
-      },
-      onPageStarted: (final String url) {
-        //print('>>>> ModelViewer began loading: <$url>'); // DEBUG
-      },
-      onPageFinished: (final String url) {
-        //print('>>>> ModelViewer finished loading: <$url>'); // DEBUG
-      },
-      onWebResourceError: (final WebResourceError error) {
-        print(
-            '>>>> ModelViewer failed to load: ${error.description} (${error.errorType} ${error.errorCode})'); // DEBUG
-      },
-    );
+    if (_proxy == null) {
+      return WebView(
+        initialUrl: null,
+        javascriptMode: JavascriptMode.unrestricted,
+        initialMediaPlaybackPolicy: AutoMediaPlaybackPolicy.always_allow,
+        onWebViewCreated: (final WebViewController webViewController) async {
+          _controller.complete(webViewController);
+          final host = _proxy!.address.address;
+          final port = _proxy!.port;
+          final url = "http://$host:$port/";
+          print('>>>> ModelViewer initializing... <$url>'); // DEBUG
+          await webViewController.loadUrl(url);
+        },
+        navigationDelegate: (final NavigationRequest navigation) async {
+          //print('>>>> ModelViewer wants to load: <${navigation.url}>'); // DEBUG
+          if (!Platform.isAndroid) {
+            return NavigationDecision.navigate;
+          }
+          if (!navigation.url.startsWith("intent://")) {
+            return NavigationDecision.navigate;
+          }
+          try {
+            // See: https://developers.google.com/ar/develop/java/scene-viewer
+            final intent = android_content.AndroidIntent(
+              action: "android.intent.action.VIEW", // Intent.ACTION_VIEW
+              data: "https://arvr.google.com/scene-viewer/1.0",
+              arguments: <String, dynamic>{
+                'file': widget.src,
+                'mode': 'ar_only',
+              },
+              package: "com.google.ar.core",
+              flags: <int>[
+                Flag.FLAG_ACTIVITY_NEW_TASK
+              ], // Intent.FLAG_ACTIVITY_NEW_TASK,
+            );
+            await intent.launch();
+          } catch (error) {
+            print('>>>> ModelViewer failed to launch AR: $error'); // DEBUG
+          }
+          return NavigationDecision.prevent;
+        },
+        onPageStarted: (final String url) {
+          //print('>>>> ModelViewer began loading: <$url>'); // DEBUG
+        },
+        onPageFinished: (final String url) {
+          //print('>>>> ModelViewer finished loading: <$url>'); // DEBUG
+        },
+        onWebResourceError: (final WebResourceError error) {
+          print(
+              '>>>> ModelViewer failed to load: ${error.description} (${error.errorType} ${error.errorCode})'); // DEBUG
+        },
+      );
+    } else {
+      return Center(
+          child: CircularProgressIndicator(
+        semanticsLabel: 'Loading Model Viewer...',
+      ));
+    }
   }
 
   String _buildHTML(final String htmlTemplate) {
@@ -126,8 +133,8 @@ class ModelViewerState extends State<ModelViewer> {
       switch (request.uri.path) {
         case '/':
         case '/index.html':
-          final htmlTemplate = await rootBundle.loadString(
-              'packages/model_viewer_plus/etc/assets/template.html');
+          final htmlTemplate = await rootBundle
+              .loadString('packages/model_viewer_plus/assets/template.html');
           final html = utf8.encode(_buildHTML(htmlTemplate));
           response
             ..statusCode = HttpStatus.ok
@@ -137,9 +144,9 @@ class ModelViewerState extends State<ModelViewer> {
           await response.close();
           break;
 
-        case '/model-viewer.js':
+        case '/model-viewer.min.js':
           final code = await _readAsset(
-              'packages/model_viewer_plus/etc/assets/model-viewer.js');
+              'packages/model_viewer_plus/assets/model-viewer.min.js');
           response
             ..statusCode = HttpStatus.ok
             ..headers

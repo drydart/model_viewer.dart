@@ -1,6 +1,6 @@
 # See: https://dart.dev/tools/pub/pubspec
 name: model_viewer_plus
-version: 1.0.2+1
+version: 1.1.1
 description: >-
   A Flutter widget for rendering interactive 3D models in the glTF and GLB
   formats.
@@ -24,5 +24,4 @@ environment:
   sdk: '>=2.12.0 <3.0.0'
 flutter:
   assets:
-    - etc/assets/template.html
-    - etc/assets/model-viewer.js
+    - assets/

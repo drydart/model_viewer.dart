@@ -22,26 +22,80 @@ class ModelViewerState extends State<ModelViewer> {
   /// To generate the HTML code for using the model viewer.
   void generateModelViewerHtml() async {
     final htmlTemplate = await rootBundle
-        .loadString('packages/model_viewer_plus/etc/assets/template.html');
+        .loadString('packages/model_viewer_plus/assets/template.html');
     // allow to use elements
     final NodeValidator _validator = NodeValidatorBuilder.common()
       ..allowElement('meta',
           attributes: ['name', 'content'], uriPolicy: _AllowUriPolicy())
       ..allowElement('style')
-      ..allowElement('script',
-          attributes: ['src', 'type', 'defer'], uriPolicy: _AllowUriPolicy())
+      // ..allowElement('script',
+      //     attributes: ['src', 'type', 'defer'], uriPolicy: _AllowUriPolicy())
       ..allowCustomElement('model-viewer',
           attributes: [
-            'src',
             'style',
+
+            // Loading Attributes
+            'src',
             'alt',
+            'poster',
+            'poster',
+            'seamless-poster',
+            'loading',
+            'reveal',
+
+            // Augmented Reality Attributes
             'ar',
+            'ar-modes',
+            'ar-scale',
+            'ar-placement',
+            'ios-src',
+            'xr-environment',
+
+            // Staing & Cameras Attributes
+            'camera-controls',
+            'touch-action',
+            'disable-zoom',
+            'orbit-sensitivity',
             'auto-rotate',
-            'camera-controls'
+            'auto-rotate-delay',
+            'rotation-per-second',
+            'interaction-policy',
+            'interaction-prompt',
+            'interaction-prompt-style',
+            'interaction-prompt-threshold',
+            'camera-orbit',
+            'camera-target',
+            'field-of-view',
+            'max-camera-orbit',
+            'min-camera-orbit',
+            'max-field-of-view',
+            'min-field-of-view',
+            'bounds',
+            'interpolation-decay',
+
+            // Lighting & Env Attributes
+            'skybox-image',
+            'environment-image',
+            'exposure',
+            'shadow-intensity',
+            'shadow-softness ',
+
+            // Animation Attributes
+            'animation-name',
+            'animation-crossfade-duration',
+            'autoplay ',
+
+            // Scene Graph Attributes
+            'variant-name',
+            'orientation',
+            'scale',
           ],
           uriPolicy: _AllowUriPolicy());
 
-    final html = _buildHTMLForWeb(htmlTemplate, useCdn: true);
+    final html = _buildHTML(htmlTemplate);
+
+    // print(html); // DEBUG
+
     ui.platformViewRegistry.registerViewFactory(
         'model-viewer-html',
         (int viewId) => HtmlHtmlElement()
@@ -58,10 +112,6 @@ class ModelViewerState extends State<ModelViewer> {
   @override
   void dispose() {
     super.dispose();
-    // if (_proxy != null) {
-    //   _proxy!.close(force: true);
-    //   _proxy = null;
-    // }
   }
 
   @override
@@ -77,30 +127,19 @@ class ModelViewerState extends State<ModelViewer> {
             child: CircularProgressIndicator(
             semanticsLabel: 'Loading Model Viewer...',
           ))
-        : HtmlElementView(
-            viewType: 'model-viewer-html',
-            onPlatformViewCreated: (int a) async {
-              print('onPlatformViewCreated: $a');
-            },
-          );
+        : HtmlElementView(viewType: 'model-viewer-html');
   }
 
-  String _buildHTMLForWeb(final String htmlTemplate,
-      {bool useCdn = true,
-      String cdnUrl =
-          'https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js'}) {
+  String _buildHTML(final String htmlTemplate) {
     if (widget.src.startsWith('file://')) {
       // Local file URL can't be used in Flutter web.
-      print("file: URL scheme can't be used in Flutter web.");
+      print("file:// URL scheme can't be used in Flutter web.");
     }
 
     return HTMLBuilder.build(
-      // For web, is it better to use the CDN's min.js ?
       htmlTemplate: htmlTemplate.replaceFirst(
-          '<script src="model-viewer.js" defer>',
-          useCdn
-              ? '<script type="module" src="${cdnUrl}">'
-              : '<script src="assets/packages/model_viewer_plus/etc/assets/model-viewer.js" defer>'),
+          '<script type="module" src="model-viewer.min.js" defer></script>',
+          ''),
       backgroundColor: widget.backgroundColor,
       src: widget.src,
       alt: widget.alt,
