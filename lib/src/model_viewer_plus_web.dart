@@ -5,8 +5,10 @@ import 'package:flutter/services.dart' show rootBundle;
 
 import 'html_builder.dart';
 
-import 'dart:ui' as ui;
-import 'dart:html';
+// import 'dart:ui' as ui;
+import 'shim/dart_ui_fake.dart' if (dart.library.html) 'dart:ui' as ui;
+import 'shim/dart_html_fake.dart' if (dart.library.html) 'dart:html';
+// import 'dart:html';
 
 import 'model_viewer_plus.dart';
 

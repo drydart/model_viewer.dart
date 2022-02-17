@@ -19,5 +19,5 @@ environment:
 flutter:
   uses-material-design: true
   assets:
-    - etc/assets/Astronaut.glb
+    - assets/Astronaut.glb
 publish_to: none
