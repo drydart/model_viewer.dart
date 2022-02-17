@@ -1,5 +1,7 @@
 # 3D Model Viewer for Flutter
-https://pub.dev/packages/model_viewer - Fork from a package that is discontinued. 
+
+<https://pub.dev/packages/model_viewer> - Fork from a package that is discontinued,
+and add the web support for it.
 
 This is a [Flutter](https://flutter.dev) widget for rendering interactive
 3D models in the [glTF](https://www.khronos.org/gltf/) and
@@ -10,11 +12,12 @@ web component in a [WebView](https://pub.dev/packages/webview_flutter).
 
 ## Screenshot
 
-<img alt="Screenshot of astronaut model" src="https://raw.githubusercontent.com/drydart/model_viewer.dart/master/example/flutter_01.png" width="480"/>
+<img alt="Screenshot of astronaut model" src="./example/flutter_01.png" width="480"/>
+<img alt="Screenshot of astronaut model" src="./example/flutter_02.png" width="480"/>
 
 ## Compatibility
 
-Android and iOS, with [a recent system browser version](https://modelviewer.dev/#section-browser-support).
+Android, iOS, Web, with [a recent system browser version](https://modelviewer.dev/#section-browser-support).
 
 ## Installation
 
@@ -74,6 +77,24 @@ the key `io.flutter.embedded_views_preview` and the value `YES`:
 <true/>
 ```
 
+### `web/index.html` (Web only)
+
+Modify the `<head>` tag of your `web/index.html` to load the JavaScript, like so:
+
+```html
+<head>
+
+  <!-- Other stuff -->
+
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js" defer></script>
+</head>
+```
+
+The [official site](https://modelviewer.dev) uses unpkg. You may replace the
+value of `src` attribute with another CDN mirror's URL. Or if you are willing
+to use the default js file which is included in this package's asset, you may
+replace the value  with `./assets/packages/model_viewer_plus/assets/model-viewer.min.js`.
+
 ## Features
 
 - Renders glTF and GLB models. (Also, [USDZ] models on iOS 12+.)
@@ -130,6 +151,8 @@ class MyApp extends StatelessWidget {
 ```
 
 ### Loading a model from the file system
+
+This is not avaliable on Web.
 
 ```dart
 class MyApp extends StatelessWidget {
