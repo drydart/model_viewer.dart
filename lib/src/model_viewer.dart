@@ -6,6 +6,8 @@ import 'dart:io'
     show File, HttpRequest, HttpServer, HttpStatus, InternetAddress, Platform;
 import 'dart:typed_data' show Uint8List;
 
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_android/android_content.dart' as android_content;
@@ -28,7 +30,8 @@ class ModelViewer extends StatefulWidget {
       this.autoRotateDelay,
       this.autoPlay,
       this.cameraControls,
-      this.iosSrc})
+      this.iosSrc,
+      this.gestureRecognizers})
       : super(key: key);
 
   /// The background color for the model viewer.
@@ -84,6 +87,17 @@ class ModelViewer extends StatefulWidget {
   /// The URL to a USDZ model which will be used on supported iOS 12+ devices
   /// via AR Quick Look.
   final String iosSrc;
+    
+  /// Which gestures should be consumed by the web view.
+  ///
+  /// It is possible for other gesture recognizers to be competing with the web view on pointer
+  /// events, e.g if the web view is inside a [ListView] the [ListView] will want to handle
+  /// vertical drags. The web view will claim gestures that are recognized by any of the
+  /// recognizers on this list.
+  ///
+  /// When this set is empty or null, the web view will only handle pointer events for gestures that
+  /// were not claimed by any other gesture recognizer.
+  final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers;
 
   @override
   State<ModelViewer> createState() => _ModelViewerState();
@@ -122,6 +136,7 @@ class _ModelViewerState extends State<ModelViewer> {
       initialUrl: null,
       javascriptMode: JavascriptMode.unrestricted,
       initialMediaPlaybackPolicy: AutoMediaPlaybackPolicy.always_allow,
+      gestureRecognizers: widget.gestureRecognizers,
       onWebViewCreated: (final WebViewController webViewController) async {
         _controller.complete(webViewController);
         final host = _proxy.address.address;
