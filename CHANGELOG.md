@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.3] - 2022-03-14
+
+### Changed
+
+- `ModelViewer`'s default `backgroundColor` from `Colors.white` to `Colors.transparent`, due to [#12](https://github.com/omchiii/model_viewer_plus.dart/issues/12)
+- `proxy`'s null check fix and `setState() {}` for it, due to [#10](https://github.com/omchiii/model_viewer_plus.dart/issues/10)
+
 ## [1.1.2] - 2022-02-17
 
 ### Added
