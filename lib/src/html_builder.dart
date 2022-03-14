@@ -10,7 +10,7 @@ abstract class HTMLBuilder {
   static String build(
       {final String htmlTemplate = '',
       required final String src,
-      final Color backgroundColor = const Color(0xFFFFFF),
+      final Color backgroundColor = Colors.transparent,
       final String? alt,
       final bool? ar,
       final List<String>? arModes,
@@ -24,7 +24,7 @@ abstract class HTMLBuilder {
     html.write('<model-viewer');
     html.write(' src="${htmlEscape.convert(src)}"');
     html.write(
-        ' style="background-color: rgb(${backgroundColor.red}, ${backgroundColor.green}, ${backgroundColor.blue});"');
+        ' style="background-color: rgba(${backgroundColor.red}, ${backgroundColor.green}, ${backgroundColor.blue}, ${backgroundColor.alpha});"');
     if (alt != null) {
       html.write(' alt="${htmlEscape.convert(alt)}"');
     }

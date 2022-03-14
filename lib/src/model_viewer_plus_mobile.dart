@@ -46,7 +46,14 @@ class ModelViewerState extends State<ModelViewer> {
   @override
   Widget build(final BuildContext context) {
     if (_proxy == null) {
+      return Center(
+        child: CircularProgressIndicator(
+          semanticsLabel: 'Loading Model Viewer...',
+        ),
+      );
+    } else {
       return WebView(
+        backgroundColor: Colors.transparent,
         initialUrl: null,
         javascriptMode: JavascriptMode.unrestricted,
         initialMediaPlaybackPolicy: AutoMediaPlaybackPolicy.always_allow,
@@ -97,11 +104,6 @@ class ModelViewerState extends State<ModelViewer> {
               '>>>> ModelViewer failed to load: ${error.description} (${error.errorType} ${error.errorCode})'); // DEBUG
         },
       );
-    } else {
-      return Center(
-          child: CircularProgressIndicator(
-        semanticsLabel: 'Loading Model Viewer...',
-      ));
     }
   }
 
@@ -125,6 +127,11 @@ class ModelViewerState extends State<ModelViewer> {
   Future<void> _initProxy() async {
     final url = Uri.parse(widget.src);
     _proxy = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
+
+    setState(() {
+      _proxy;
+    });
+
     _proxy!.listen((final HttpRequest request) async {
       //print("${request.method} ${request.uri}"); // DEBUG
       //print(request.headers); // DEBUG

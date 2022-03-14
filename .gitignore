@@ -12,3 +12,5 @@
 .packages
 build/
 pubspec.lock
+.flutter-plugins
+.flutter-plugins-dependencies
