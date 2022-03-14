@@ -75,6 +75,9 @@ abstract class HTMLBuilder {
     // TODO: shadow-intensity
     // TODO: shadow-softness
     html.writeln('></model-viewer>');
+
+    // print(html.toString()); // DEBUG
+
     return html.toString();
   }
 }

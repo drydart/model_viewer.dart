@@ -19,13 +19,17 @@ web component in a [WebView](https://pub.dev/packages/webview_flutter).
 
 Android, iOS, Web, with [a recent system browser version](https://modelviewer.dev/#section-browser-support).
 
+## Notes
+
+We use the [Google APP](https://play.google.com/store/apps/details?id=com.google.android.googlequicksearchbox), `com.google.android.googlequicksearchbox` to display interactive 3D models on Android. The model displays in 'ar_preferred' mode by default, Scene Viewer launches in AR native mode as the entry mode. If [Google Play Services for AR (ARCore, `com.google.ar.core`)](https://play.google.com/store/apps/details?id=com.google.ar.core) isn't present, Scene Viewer gracefully falls back to 3D mode as the entry mode.
+
 ## Installation
 
 ### `pubspec.yaml`
 
 ```yaml
 dependencies:
-   model_viewer_plus: ^1.0.0
+   model_viewer_plus: ^(newest from https://pub.dev/packages/model_viewer_plus)
 ```
 
 ### `AndroidManifest.xml` (Android 9+ only)
