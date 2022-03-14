@@ -5,6 +5,7 @@ import 'dart:convert' show utf8;
 import 'dart:io'
     show File, HttpRequest, HttpServer, HttpStatus, InternetAddress, Platform;
 import 'dart:typed_data' show Uint8List;
+import 'package:path/path.dart' as p;
 
 import 'package:android_intent_plus/flag.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,7 @@ class ModelViewerState extends State<ModelViewer> {
       Completer<WebViewController>();
 
   HttpServer? _proxy;
+  late String _proxyURL;
 
   @override
   void initState() {
@@ -59,14 +61,11 @@ class ModelViewerState extends State<ModelViewer> {
         initialMediaPlaybackPolicy: AutoMediaPlaybackPolicy.always_allow,
         onWebViewCreated: (final WebViewController webViewController) async {
           _controller.complete(webViewController);
-          final host = _proxy!.address.address;
-          final port = _proxy!.port;
-          final url = "http://$host:$port/";
-          print('>>>> ModelViewer initializing... <$url>'); // DEBUG
-          await webViewController.loadUrl(url);
+          print('>>>> ModelViewer initializing... <$_proxyURL>'); // DEBUG
+          await webViewController.loadUrl(_proxyURL);
         },
         navigationDelegate: (final NavigationRequest navigation) async {
-          //print('>>>> ModelViewer wants to load: <${navigation.url}>'); // DEBUG
+          print('>>>> ModelViewer wants to load: <${navigation.url}>'); // DEBUG
           if (!Platform.isAndroid) {
             return NavigationDecision.navigate;
           }
@@ -74,20 +73,53 @@ class ModelViewerState extends State<ModelViewer> {
             return NavigationDecision.navigate;
           }
           try {
+            // Original, just keep as a backup
             // See: https://developers.google.com/ar/develop/java/scene-viewer
+            // final intent = android_content.AndroidIntent(
+            //   action: "android.intent.action.VIEW", // Intent.ACTION_VIEW
+            //   data: "https://arvr.google.com/scene-viewer/1.0",
+            //   arguments: <String, dynamic>{
+            //     'file': widget.src,
+            //     'mode': 'ar_preferred',
+            //   },
+            //   package: "com.google.ar.core",
+            //   flags: <int>[
+            //     Flag.FLAG_ACTIVITY_NEW_TASK
+            //   ], // Intent.FLAG_ACTIVITY_NEW_TASK,
+            // );
+
+            // 2022-03-14 update
+            final String fileURL;
+            if (['http', 'https'].contains(Uri.parse(widget.src).scheme)) {
+              fileURL = widget.src;
+            } else {
+              fileURL = p.joinAll([_proxyURL, 'model']);
+            }
             final intent = android_content.AndroidIntent(
               action: "android.intent.action.VIEW", // Intent.ACTION_VIEW
-              data: "https://arvr.google.com/scene-viewer/1.0",
+              // See https://developers.google.com/ar/develop/scene-viewer#3d-or-ar
+              // data should be something like "https://arvr.google.com/scene-viewer/1.0?file=https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Avocado/glTF/Avocado.gltf"
+              data: Uri(
+                  scheme: 'https',
+                  host: 'arvr.google.com',
+                  path: '/scene-viewer/1.0',
+                  queryParameters: {
+                    // 'title': '', // TODO: maybe set by the user
+                    // TODO: further test, and make it 'ar_preferred'
+                    'mode': 'ar_preferred',
+                    'file': fileURL,
+                  }).toString(),
+              // package changed to com.google.android.googlequicksearchbox
+              // to support the widest possible range of devices
+              package: "com.google.android.googlequicksearchbox",
               arguments: <String, dynamic>{
-                'file': widget.src,
-                'mode': 'ar_only',
+                'browser_fallback_url':
+                    'market://details?id=com.google.android.googlequicksearchbox'
               },
-              package: "com.google.ar.core",
-              flags: <int>[
-                Flag.FLAG_ACTIVITY_NEW_TASK
-              ], // Intent.FLAG_ACTIVITY_NEW_TASK,
             );
-            await intent.launch();
+            await intent.launch().onError((error, stackTrace) {
+              print('>>>> ModelViewer Intent Error: $error'); // DEBUG
+            });
           } catch (error) {
             print('>>>> ModelViewer failed to launch AR: $error'); // DEBUG
           }
@@ -130,6 +162,9 @@ class ModelViewerState extends State<ModelViewer> {
 
     setState(() {
       _proxy;
+      final host = _proxy!.address.address;
+      final port = _proxy!.port;
+      _proxyURL = "http://$host:$port/";
     });
 
     _proxy!.listen((final HttpRequest request) async {

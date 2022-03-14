@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.4] - 2022-03-14
+
+### Changed
+
+- `/lib/src/model_viewer_plus_mobile.dart`, update according to the [newest document](https://developers.google.com/ar/develop/scene-viewer#3d-or-ar). Fix [#9](https://github.com/omchiii/model_viewer_plus.dart/issues/9).
+  - Insted of `com.google.ar.core`, now we use `com.google.android.googlequicksearchbox`. This should support the widest possible range of devices.
+  - Mode defaults to `ar_preferred`. Scene Viewer launches in AR native mode as the entry mode. If Google Play Services for AR isn't present, Scene Viewer gracefully falls back to 3D mode as the entry mode.
+- Add `arModes` to example, closer to [modelviewer.dev](https://modelviewer.dev)'s offical example.
+- Update `example\android\app\build.gradle` `compileSdkVersion` to 31
+- Update `android_intent_plus` to `3.1.1`
+- Update `android_intent_plus to` `3.0.1`
+
+### Removed
+
+- `/lib/src/http_proxy.dart`: empty file
+
 ## [1.1.3] - 2022-03-14
 
 ### Changed
