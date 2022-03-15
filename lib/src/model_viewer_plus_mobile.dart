@@ -5,6 +5,8 @@ import 'dart:convert' show utf8;
 import 'dart:io'
     show File, HttpRequest, HttpServer, HttpStatus, InternetAddress, Platform;
 import 'dart:typed_data' show Uint8List;
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:path/path.dart' as p;
 
 import 'package:android_intent_plus/flag.dart';
@@ -59,6 +61,11 @@ class ModelViewerState extends State<ModelViewer> {
         initialUrl: null,
         javascriptMode: JavascriptMode.unrestricted,
         initialMediaPlaybackPolicy: AutoMediaPlaybackPolicy.always_allow,
+        gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
+          Factory<OneSequenceGestureRecognizer>(
+            () => EagerGestureRecognizer(),
+          ),
+        },
         onWebViewCreated: (final WebViewController webViewController) async {
           _controller.complete(webViewController);
           print('>>>> ModelViewer initializing... <$_proxyURL>'); // DEBUG
