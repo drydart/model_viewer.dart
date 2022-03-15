@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.5] - 2022-03-15
+
+### Changed
+
+- `lib/src/model_viewer_plus_mobile.dart`
+  - Fix [#11](https://github.com/omchiii/model_viewer_plus.dart/issues/11), add `gestureRecognizers`
+  - A less elegant solution of [#8](https://github.com/omchiii/model_viewer_plus.dart/issues/8), open usdz file by [url_launcher](https://pub.dev/packages/url_launcher) in SFSafariViewController.
+
 ## [1.1.4] - 2022-03-14
 
 ### Changed
