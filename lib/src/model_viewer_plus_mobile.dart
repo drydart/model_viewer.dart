@@ -5,12 +5,15 @@ import 'dart:convert' show utf8;
 import 'dart:io'
     show File, HttpRequest, HttpServer, HttpStatus, InternetAddress, Platform;
 import 'dart:typed_data' show Uint8List;
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:path/path.dart' as p;
 
 import 'package:android_intent_plus/flag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:android_intent_plus/android_intent.dart' as android_content;
+import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import 'html_builder.dart';
@@ -59,6 +62,11 @@ class ModelViewerState extends State<ModelViewer> {
         initialUrl: null,
         javascriptMode: JavascriptMode.unrestricted,
         initialMediaPlaybackPolicy: AutoMediaPlaybackPolicy.always_allow,
+        gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
+          Factory<OneSequenceGestureRecognizer>(
+            () => EagerGestureRecognizer(),
+          ),
+        },
         onWebViewCreated: (final WebViewController webViewController) async {
           _controller.complete(webViewController);
           print('>>>> ModelViewer initializing... <$_proxyURL>'); // DEBUG
@@ -67,6 +75,13 @@ class ModelViewerState extends State<ModelViewer> {
         navigationDelegate: (final NavigationRequest navigation) async {
           print('>>>> ModelViewer wants to load: <${navigation.url}>'); // DEBUG
           if (!Platform.isAndroid) {
+            if(Platform.isIOS && navigation.url == widget.iosSrc) {
+              await launch(
+                navigation.url,
+                forceSafariVC: true,
+              );
+              return NavigationDecision.prevent;
+            }
             return NavigationDecision.navigate;
           }
           if (!navigation.url.startsWith("intent://")) {
@@ -238,3 +253,4 @@ class ModelViewerState extends State<ModelViewer> {
     return await File(path).readAsBytes();
   }
 }
+
