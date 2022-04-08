@@ -19,7 +19,9 @@ abstract class HTMLBuilder {
       final int? autoRotateDelay,
       final bool? autoPlay,
       final bool? cameraControls,
-      final String? iosSrc}) {
+      final String? iosSrc,
+      final String? animationName,
+      final int? animationCrossfadeDuration}) {
     final html = StringBuffer(htmlTemplate);
     html.write('<model-viewer');
     html.write(' src="${htmlEscape.convert(src)}"');
@@ -28,8 +30,12 @@ abstract class HTMLBuilder {
     if (alt != null) {
       html.write(' alt="${htmlEscape.convert(alt)}"');
     }
-    // TODO: animation-name
-    // TODO: animation-crossfade-duration
+    if (animationName != null) {
+      html.write(' animation-name="${htmlEscape.convert(animationName)}"');
+    }
+    if (animationCrossfadeDuration != null) {
+      html.write(' animation-crossfade-duration="$animationCrossfadeDuration"');
+    }
     if (ar ?? false) {
       html.write(' ar');
     }
