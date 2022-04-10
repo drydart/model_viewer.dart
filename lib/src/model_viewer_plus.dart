@@ -18,7 +18,9 @@ class ModelViewer extends StatefulWidget {
       this.autoRotateDelay,
       this.autoPlay,
       this.cameraControls,
-      this.iosSrc})
+      this.iosSrc,
+      this.animationName,
+      this.animationCrossfadeDuration})
       : super(key: key);
 
   /// The background color for the model viewer.
@@ -74,6 +76,14 @@ class ModelViewer extends StatefulWidget {
   /// The URL to a USDZ model which will be used on supported iOS 12+ devices
   /// via AR Quick Look.
   final String? iosSrc;
+
+  /// Name of the animation clip that will be played if autoPlay is set to true.
+  final String? animationName;
+
+  /// Duration in millisecond of the crossfade between animations
+  /// defaults to 300 ms.
+  final int? animationCrossfadeDuration;
+
 
   @override
   State<ModelViewer> createState() => ModelViewerState();
