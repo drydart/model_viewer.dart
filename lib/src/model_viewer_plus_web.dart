@@ -41,6 +41,7 @@ class ModelViewerState extends State<ModelViewer> {
             'seamless-poster',
             'loading',
             'reveal',
+            'with-credentials',
 
             // Augmented Reality Attributes
             'ar',
@@ -52,6 +53,7 @@ class ModelViewerState extends State<ModelViewer> {
 
             // Staing & Cameras Attributes
             'camera-controls',
+            'enable-pan',
             'touch-action',
             'disable-zoom',
             'orbit-sensitivity',
@@ -82,7 +84,7 @@ class ModelViewerState extends State<ModelViewer> {
             // Animation Attributes
             'animation-name',
             'animation-crossfade-duration',
-            'autoplay ',
+            'autoplay',
 
             // Scene Graph Attributes
             'variant-name',
@@ -132,24 +134,79 @@ class ModelViewerState extends State<ModelViewer> {
   String _buildHTML(final String htmlTemplate) {
     if (widget.src.startsWith('file://')) {
       // Local file URL can't be used in Flutter web.
-      print("file:// URL scheme can't be used in Flutter web.");
+      debugPrint("file:// URL scheme can't be used in Flutter web.");
+      throw ArgumentError("file:// URL scheme can't be used in Flutter web.");
     }
 
     return HTMLBuilder.build(
       htmlTemplate: htmlTemplate.replaceFirst(
           '<script type="module" src="model-viewer.min.js" defer></script>',
           ''),
-      backgroundColor: widget.backgroundColor,
+      // Attributes
       src: widget.src,
       alt: widget.alt,
+      poster: widget.poster,
+      seamlessPoster: widget.seamlessPoster,
+      loading: widget.loading,
+      reveal: widget.reveal,
+      withCredentials: widget.withCredentials,
+      // AR Attributes
       ar: widget.ar,
       arModes: widget.arModes,
       arScale: widget.arScale,
+      arPlacement: widget.arPlacement,
+      iosSrc: widget.iosSrc,
+      xrEnvironment: widget.xrEnvironment,
+      // Staing & Cameras Attributes
+      cameraControls: widget.cameraControls,
+      enablePan: widget.enablePan,
+      touchAction: widget.touchAction,
+      disableZoom: widget.disableZoom,
+      orbitSensitivity: widget.orbitSensitivity,
       autoRotate: widget.autoRotate,
       autoRotateDelay: widget.autoRotateDelay,
+      rotationPerSecond: widget.rotationPerSecond,
+      interactionPolicy: widget.interactionPolicy,
+      interactionPrompt: widget.interactionPrompt,
+      interactionPromptStyle: widget.interactionPromptStyle,
+      interactionPromptThreshold: widget.interactionPromptThreshold,
+      cameraOrbit: widget.cameraOrbit,
+      cameraTarget: widget.cameraTarget,
+      fieldOfView: widget.fieldOfView,
+      maxCameraOrbit: widget.maxCameraOrbit,
+      minCameraOrbit: widget.minCameraOrbit,
+      maxFieldOfView: widget.maxFieldOfView,
+      minFieldOfView: widget.minFieldOfView,
+      bounds: widget.bounds,
+      interpolationDecay: widget.interpolationDecay,
+      // Lighting & Env Attributes
+      skyboxImage: widget.skyboxImage,
+      environmentImage: widget.environmentImage,
+      exposure: widget.exposure,
+      shadowIntensity: widget.shadowIntensity,
+      shadowSoftness: widget.shadowSoftness,
+      // Animation Attributes
+      animationName: widget.animationName,
+      animationCrossfadeDuration: widget.animationCrossfadeDuration,
       autoPlay: widget.autoPlay,
-      cameraControls: widget.cameraControls,
-      iosSrc: widget.iosSrc,
+      // Scene Graph Attributes
+      variantName: widget.variantName,
+      orientation: widget.orientation,
+      scale: widget.scale,
+
+      // CSS Styles
+      backgroundColor: widget.backgroundColor,
+      // Loading CSS
+      posterColor: widget.posterColor,
+      // Annotations CSS
+      minHotspotOpacity: widget.minHotspotOpacity,
+      maxHotspotOpacity: widget.maxHotspotOpacity,
+
+      // Others
+      innerModelViewerHtml: widget.innerModelViewerHtml,
+      relatedCss: widget.relatedCss,
+      relatedJs: widget.relatedJs,
+      id: widget.id,
     );
   }
 }

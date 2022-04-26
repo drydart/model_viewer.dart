@@ -75,7 +75,7 @@ class ModelViewerState extends State<ModelViewer> {
         navigationDelegate: (final NavigationRequest navigation) async {
           print('>>>> ModelViewer wants to load: <${navigation.url}>'); // DEBUG
           if (!Platform.isAndroid) {
-            if(Platform.isIOS && navigation.url == widget.iosSrc) {
+            if (Platform.isIOS && navigation.url == widget.iosSrc) {
               await launch(
                 navigation.url,
                 forceSafariVC: true,
@@ -157,17 +157,70 @@ class ModelViewerState extends State<ModelViewer> {
   String _buildHTML(final String htmlTemplate) {
     return HTMLBuilder.build(
       htmlTemplate: htmlTemplate,
-      backgroundColor: widget.backgroundColor,
       src: '/model',
       alt: widget.alt,
+      poster: widget.poster,
+      seamlessPoster: widget.seamlessPoster,
+      loading: widget.loading,
+      reveal: widget.reveal,
+      withCredentials: widget.withCredentials,
+      // AR Attributes
       ar: widget.ar,
       arModes: widget.arModes,
       arScale: widget.arScale,
+      arPlacement: widget.arPlacement,
+      iosSrc: widget.iosSrc,
+      xrEnvironment: widget.xrEnvironment,
+      // Staing & Cameras Attributes
+      cameraControls: widget.cameraControls,
+      enablePan: widget.enablePan,
+      touchAction: widget.touchAction,
+      disableZoom: widget.disableZoom,
+      orbitSensitivity: widget.orbitSensitivity,
       autoRotate: widget.autoRotate,
       autoRotateDelay: widget.autoRotateDelay,
+      rotationPerSecond: widget.rotationPerSecond,
+      interactionPolicy: widget.interactionPolicy,
+      interactionPrompt: widget.interactionPrompt,
+      interactionPromptStyle: widget.interactionPromptStyle,
+      interactionPromptThreshold: widget.interactionPromptThreshold,
+      cameraOrbit: widget.cameraOrbit,
+      cameraTarget: widget.cameraTarget,
+      fieldOfView: widget.fieldOfView,
+      maxCameraOrbit: widget.maxCameraOrbit,
+      minCameraOrbit: widget.minCameraOrbit,
+      maxFieldOfView: widget.maxFieldOfView,
+      minFieldOfView: widget.minFieldOfView,
+      bounds: widget.bounds,
+      interpolationDecay: widget.interpolationDecay,
+      // Lighting & Env Attributes
+      skyboxImage: widget.skyboxImage,
+      environmentImage: widget.environmentImage,
+      exposure: widget.exposure,
+      shadowIntensity: widget.shadowIntensity,
+      shadowSoftness: widget.shadowSoftness,
+      // Animation Attributes
+      animationName: widget.animationName,
+      animationCrossfadeDuration: widget.animationCrossfadeDuration,
       autoPlay: widget.autoPlay,
-      cameraControls: widget.cameraControls,
-      iosSrc: widget.iosSrc,
+      // Scene Graph Attributes
+      variantName: widget.variantName,
+      orientation: widget.orientation,
+      scale: widget.scale,
+
+      // CSS Styles
+      backgroundColor: widget.backgroundColor,
+      // Loading CSS
+      posterColor: widget.posterColor,
+      // Annotations CSS
+      minHotspotOpacity: widget.minHotspotOpacity,
+      maxHotspotOpacity: widget.maxHotspotOpacity,
+
+      // Others
+      innerModelViewerHtml: widget.innerModelViewerHtml,
+      relatedCss: widget.relatedCss,
+      relatedJs: widget.relatedJs,
+      id: widget.id,
     );
   }
 
@@ -215,6 +268,7 @@ class ModelViewerState extends State<ModelViewer> {
 
         case '/model':
           if (url.isAbsolute && !url.isScheme("file")) {
+            // debugPrint(url.toString());
             await response.redirect(url); // TODO: proxy the resource
           } else {
             final data = await (url.isScheme("file")
@@ -231,7 +285,6 @@ class ModelViewerState extends State<ModelViewer> {
           break;
 
         case '/favicon.ico':
-        default:
           final text = utf8.encode("Resource '${request.uri}' not found");
           response
             ..statusCode = HttpStatus.notFound
@@ -240,6 +293,32 @@ class ModelViewerState extends State<ModelViewer> {
             ..add(text);
           await response.close();
           break;
+
+        default:
+          if (request.uri.isAbsolute) {
+            await response.redirect(request.uri);
+          } else if (request.uri.hasAbsolutePath) {
+            // Some gltf models need other resources from the origin
+            var pathSegments = [...url.pathSegments];
+            pathSegments.removeLast();
+            var tryDestination = p.joinAll([
+              url.origin,
+              ...pathSegments,
+              request.uri.path.replaceFirst('/', '')
+            ]);
+            debugPrint("Try: ${tryDestination}");
+            await response.redirect(Uri.parse(tryDestination));
+          } else {
+            debugPrint('404 with ${request.uri}');
+            final text = utf8.encode("Resource '${request.uri}' not found");
+            response
+              ..statusCode = HttpStatus.notFound
+              ..headers.add("Content-Type", "text/plain;charset=UTF-8")
+              ..headers.add("Content-Length", text.length.toString())
+              ..add(text);
+            await response.close();
+            break;
+          }
       }
     });
   }
@@ -253,4 +332,3 @@ class ModelViewerState extends State<ModelViewer> {
     return await File(path).readAsBytes();
   }
 }
-
