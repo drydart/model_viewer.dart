@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0]
+
+### Added
+
+- More examples in `example/lib`
+
+### Changed
+
+- `lib\html_builder.dart`, `lib\model_viewer_plus_mobile.dart`, `lib\model_viewer_plus_web.dart`, `lib\model_viewer_plus.dart`: implement all the attributes of `<model-viewer>` v1.11.1.
+- ModelViewer.arSacle from `final String? arScale` to `final ArScale? arScale`, which may be a breaking change.
+- Update `assets/model-viewer.min.js` to v1.11.1
+- Update example dir's gradle version to 7.0.2
+
 ## [1.1.5] - 2022-03-15
 
 ### Changed
@@ -23,7 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add `arModes` to example, closer to [modelviewer.dev](https://modelviewer.dev)'s offical example.
 - Update `example\android\app\build.gradle` `compileSdkVersion` to 31
 - Update `android_intent_plus` to `3.1.1`
-- Update `android_intent_plus to` `3.0.1`
+- Update `webview_flutter` to `3.0.1`
 
 ### Removed
 
