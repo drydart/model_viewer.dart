@@ -12,6 +12,7 @@ import 'model_viewer_plus.dart';
 
 class ModelViewerState extends State<ModelViewer> {
   bool _isLoading = true;
+  final String _uniqueViewType = UniqueKey().toString();
 
   @override
   void initState() {
@@ -98,7 +99,7 @@ class ModelViewerState extends State<ModelViewer> {
     // print(html); // DEBUG
 
     ui.platformViewRegistry.registerViewFactory(
-        'model-viewer-html',
+        'model-viewer-html-$_uniqueViewType',
         (int viewId) => HtmlHtmlElement()
           ..style.border = 'none'
           ..style.height = '100%'
@@ -128,7 +129,7 @@ class ModelViewerState extends State<ModelViewer> {
             child: CircularProgressIndicator(
             semanticsLabel: 'Loading Model Viewer...',
           ))
-        : HtmlElementView(viewType: 'model-viewer-html');
+        : HtmlElementView(viewType: 'model-viewer-html-$_uniqueViewType');
   }
 
   String _buildHTML(final String htmlTemplate) {

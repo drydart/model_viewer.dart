@@ -296,6 +296,7 @@ class ModelViewerState extends State<ModelViewer> {
 
         default:
           if (request.uri.isAbsolute) {
+            debugPrint("Redirect: ${request.uri}");
             await response.redirect(request.uri);
           } else if (request.uri.hasAbsolutePath) {
             // Some gltf models need other resources from the origin
