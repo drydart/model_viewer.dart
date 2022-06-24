@@ -2,7 +2,6 @@
 
 import 'dart:convert' show htmlEscape;
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../model_viewer_plus.dart';
 
@@ -27,7 +26,7 @@ abstract class HTMLBuilder {
     final ArPlacement? arPlacement,
     final String? iosSrc,
     final bool? xrEnvironment,
-    // Staing & Cameras Attributes
+    // Staging & Cameras Attributes
     final bool? cameraControls,
     final bool? enablePan,
     final TouchAction? touchAction,
@@ -178,7 +177,7 @@ abstract class HTMLBuilder {
       html.write(' xr-environment');
     }
 
-    // Staing & Cameras Attributes
+    // Staging & Cameras Attributes
     // camera-controls
     if (cameraControls ?? false) {
       html.write(' camera-controls');
@@ -420,7 +419,8 @@ abstract class HTMLBuilder {
       html.writeln('</script>');
     }
 
-    // debugPrint(html.toString()); // DEBUG
+    debugPrint("HTML generated for model_viewer_plus:");
+    debugPrint(html.toString()); // DEBUG
 
     return html.toString();
   }

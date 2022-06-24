@@ -119,7 +119,7 @@ replace the value  with `./assets/packages/model_viewer_plus/assets/model-viewer
 ### Importing the library
 
 ```dart
-import 'package:model_viewer_plus/model_viewer.dart';
+import 'package:model_viewer_plus/model_viewer_plus.dart';
 ```
 
 ### Creating a `ModelViewer` widget
