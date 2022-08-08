@@ -5,7 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.2.1] - 2022-06-22
+## [1.3.1] - 2022-08-04
+
+### Changed
+
+- Upgrade `pubspec.yaml`:
+  - `webview_flutter: ^3.0.1` -> `webview_flutter: ^3.0.4`
+  - `url_launcher: ^6.1.0` -> `url_launcher: ^6.1.5`
+
+## [1.3.0]~~[1.2.1]~~ - 2022-06-22
 
 ### Changed
 
