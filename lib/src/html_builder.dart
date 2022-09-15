@@ -282,15 +282,15 @@ abstract class HTMLBuilder {
     }
     // min-camera-orbit
     if (minCameraOrbit != null) {
-      html.write(' max-camera-orbit="${htmlEscape.convert(minCameraOrbit)}"');
+      html.write(' min-camera-orbit="${htmlEscape.convert(minCameraOrbit)}"');
     }
     // max-field-of-view
     if (maxFieldOfView != null) {
-      html.write(' max-camera-orbit="${htmlEscape.convert(maxFieldOfView)}"');
+      html.write(' max-field-of-view="${htmlEscape.convert(maxFieldOfView)}"');
     }
     // min-field-of-view
     if (minFieldOfView != null) {
-      html.write(' max-camera-orbit="${htmlEscape.convert(minFieldOfView)}"');
+      html.write(' min-field-of-view="${htmlEscape.convert(minFieldOfView)}"');
     }
     // bounds
     if (bounds != null) {
