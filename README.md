@@ -90,14 +90,12 @@ Modify the `<head>` tag of your `web/index.html` to load the JavaScript, like so
 
   <!-- Other stuff -->
 
-  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js" defer></script>
+  <script type="module" src="./assets/packages/model_viewer_plus/assets/model-viewer.min.js" defer></script>
 </head>
 ```
 
-The [official site](https://modelviewer.dev) uses unpkg. You may replace the
-value of `src` attribute with another CDN mirror's URL. Or if you are willing
-to use the default js file which is included in this package's asset, you may
-replace the value  with `./assets/packages/model_viewer_plus/assets/model-viewer.min.js`.
+`./assets/packages/model_viewer_plus/assets/model-viewer.min.js` will use the default js file which is included in this package's asset. The [official site](https://modelviewer.dev) uses unpkg, by using `https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js`, you are using the latest version of `<model-viewier>`. You may replace the
+value of `src` attribute with another CDN mirror's URL. But please notice that our model-viewer-plus maybe not able to keep up with the `<model-viewier>`'s latest version.
 
 ## Features
 

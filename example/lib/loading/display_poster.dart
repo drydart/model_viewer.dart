@@ -19,7 +19,7 @@ model-viewer#reveal {
             loading: Loading.eager,
             cameraControls: true,
             autoRotate: true,
-            poster: "https://modelviewer.dev/assets/poster-shishkebab.png",
+            poster: "https://modelviewer.dev/assets/poster-shishkebab.webp",
             src: "https://modelviewer.dev/shared-assets/models/shishkebab.glb",
             alt: "A 3D model of a shishkebab",
             relatedCss: css,
