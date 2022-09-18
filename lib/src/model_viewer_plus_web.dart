@@ -29,8 +29,19 @@ class ModelViewerState extends State<ModelViewer> {
       ..allowElement('meta',
           attributes: ['name', 'content'], uriPolicy: _AllowUriPolicy())
       ..allowElement('style')
-      // ..allowElement('script',
-      //     attributes: ['src', 'type', 'defer'], uriPolicy: _AllowUriPolicy())
+      ..allowElement('script',
+          attributes: [
+            'src',
+            'type',
+            'defer',
+            'async',
+            'crossorigin',
+            'integrity',
+            'nomodule',
+            'nonce',
+            'referrerpolicy'
+          ],
+          uriPolicy: _AllowUriPolicy())
       ..allowCustomElement('model-viewer',
           attributes: [
             'style',

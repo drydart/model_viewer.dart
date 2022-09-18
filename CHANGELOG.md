@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.3] - 2022-09-18
+
+### Changed
+
+- Fix: `Removing disallowed element <SCRIPT> from [object DocumentFragment]`, in `lib\src\model_viewer_plus_web.dart`
+- Update `example\lib\loading\display_poster.dart`
+- Update `README.md`, due to `<model-viewer>` upgrades to 2.0.0 and we have not keep up with it's latest version. So, Flutter Web users should replace `src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"` with `src="./assets/packages/model_viewer_plus/assets/model-viewer.min.js"` to use the js file in our package.
+
+### Added
+
+- Add a new example: `example\lib\loading\render_scale.dart`
+
 ## [1.3.2] - 2022-09-14
 
 ### Changed
