@@ -42,6 +42,17 @@ class ModelViewerState extends State<ModelViewer> {
             'referrerpolicy'
           ],
           uriPolicy: _AllowUriPolicy())
+      ..allowElement('button',
+          attributes: [
+            'class',
+            'slot',
+            'data-position',
+            'data-normal',
+            'data-orbit',
+            'data-target',
+            'data-visibility-attribute'
+          ],
+          uriPolicy: _AllowUriPolicy())
       ..allowCustomElement('model-viewer',
           attributes: [
             'style',
