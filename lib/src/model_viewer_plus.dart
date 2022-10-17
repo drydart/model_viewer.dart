@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:model_viewer_plus/model_viewer_plus.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
-import 'model_viewer_plus_stub.dart'
-    if (dart.library.io) 'model_viewer_plus_mobile.dart'
-    if (dart.library.js) 'model_viewer_plus_web.dart';
+import 'model_viewer_plus_stub.dart' if (dart.library.io) 'model_viewer_plus_mobile.dart' if (dart.library.js) 'model_viewer_plus_web.dart';
 
 enum Loading { auto, lazy, eager }
+
 enum Reveal { auto, interaction, manual }
+
 enum ArScale { auto, fixed }
+
 enum ArPlacement { floor, wall }
+
 enum TouchAction { panY, panX, none }
+
 enum InteractionPolicy { allowWhenFocused, alwaysAllow }
+
 enum InteractionPrompt { auto, whenFocused, none }
+
 enum InteractionPromptStyle { wiggle, basic }
+
 enum Bounds { tight, legacy }
 
 /// Flutter widget for rendering interactive 3D models.
@@ -72,6 +78,10 @@ class ModelViewer extends StatefulWidget {
     this.relatedCss,
     this.relatedJs,
     this.id,
+    this.onProgress,
+    this.onLoad,
+    this.onError,
+    this.onWebResourceError,
   }) : super(key: key);
 
   // Loading Attributes
@@ -565,6 +575,25 @@ class ModelViewer extends StatefulWidget {
 
   /// The id of the [ModelViewer] in HTML.
   final String? id;
+
+  ///This callback will used for getting the progress of 3D asset
+  ///This will listen to the callback from the Javascript code
+  ///Output: return [double] which contain the progress of 3d model
+  ///Output: return [1] if model successfully loads
+  final Function(double)? onProgress;
+
+  ///This callback will used for getting the Error when 3D model fails to load
+  ///This will listen to the callback from the Javascript code
+  ///Output: return [String] which contain the error
+  final Function(String)? onError;
+
+  ///This callback will call when 3D model loads successfully
+  ///This will listen to the callback from the Javascript code
+  ///Output: return [bool] which contain the it loaded or not [True] if loads & [False] if fails
+  final Function(bool)? onLoad;
+
+  ///Invoked when a web resource has failed to load
+  final Function(WebResourceError)? onWebResourceError;
 
   @override
   State<ModelViewer> createState() => ModelViewerState();

@@ -5,19 +5,18 @@ import 'dart:convert' show utf8;
 import 'dart:io'
     show File, HttpRequest, HttpServer, HttpStatus, InternetAddress, Platform;
 import 'dart:typed_data' show Uint8List;
+
+import 'package:android_intent_plus/android_intent.dart' as android_content;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
-import 'package:path/path.dart' as p;
-
-import 'package:android_intent_plus/flag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:android_intent_plus/android_intent.dart' as android_content;
+import 'package:model_viewer_plus/src/utils/constants.dart';
+import 'package:path/path.dart' as p;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import 'html_builder.dart';
-
 import 'model_viewer_plus.dart';
 
 class ModelViewerState extends State<ModelViewer> {
@@ -58,7 +57,7 @@ class ModelViewerState extends State<ModelViewer> {
       );
     } else {
       return WebView(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.black,
         initialUrl: null,
         javascriptMode: JavascriptMode.unrestricted,
         initialMediaPlaybackPolicy: AutoMediaPlaybackPolicy.always_allow,
@@ -88,22 +87,6 @@ class ModelViewerState extends State<ModelViewer> {
             return NavigationDecision.navigate;
           }
           try {
-            // Original, just keep as a backup
-            // See: https://developers.google.com/ar/develop/java/scene-viewer
-            // final intent = android_content.AndroidIntent(
-            //   action: "android.intent.action.VIEW", // Intent.ACTION_VIEW
-            //   data: "https://arvr.google.com/scene-viewer/1.0",
-            //   arguments: <String, dynamic>{
-            //     'file': widget.src,
-            //     'mode': 'ar_preferred',
-            //   },
-            //   package: "com.google.ar.core",
-            //   flags: <int>[
-            //     Flag.FLAG_ACTIVITY_NEW_TASK
-            //   ], // Intent.FLAG_ACTIVITY_NEW_TASK,
-            // );
-
-            // 2022-03-14 update
             final String fileURL;
             if (['http', 'https'].contains(Uri.parse(widget.src).scheme)) {
               fileURL = widget.src;
@@ -112,8 +95,6 @@ class ModelViewerState extends State<ModelViewer> {
             }
             final intent = android_content.AndroidIntent(
               action: "android.intent.action.VIEW", // Intent.ACTION_VIEW
-              // See https://developers.google.com/ar/develop/scene-viewer#3d-or-ar
-              // data should be something like "https://arvr.google.com/scene-viewer/1.0?file=https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Avocado/glTF/Avocado.gltf"
               data: Uri(
                   scheme: 'https',
                   host: 'arvr.google.com',
@@ -140,15 +121,33 @@ class ModelViewerState extends State<ModelViewer> {
           }
           return NavigationDecision.prevent;
         },
-        onPageStarted: (final String url) {
-          //print('>>>> ModelViewer began loading: <$url>'); // DEBUG
-        },
-        onPageFinished: (final String url) {
-          //print('>>>> ModelViewer finished loading: <$url>'); // DEBUG
-        },
-        onWebResourceError: (final WebResourceError error) {
-          print(
-              '>>>> ModelViewer failed to load: ${error.description} (${error.errorType} ${error.errorCode})'); // DEBUG
+        onPageStarted: (final String url) {},
+        onWebResourceError: widget.onWebResourceError,
+        javascriptChannels: {
+          JavascriptChannel(
+            name: kProgressKey,
+            onMessageReceived: (JavascriptMessage progress) {
+              widget.onProgress!(double.parse(progress.message));
+            },
+          ),
+          JavascriptChannel(
+            name: kErrorKey,
+            onMessageReceived: (JavascriptMessage message) {
+              if (message.message.isNotEmpty) {
+                widget.onError!(message.message);
+              }
+            },
+          ),
+          JavascriptChannel(
+            name: kLoadKey,
+            onMessageReceived: (JavascriptMessage message) {
+              if (message.message == "Loaded") {
+                widget.onLoad!(true);
+                return;
+              }
+              widget.onLoad!(false);
+            },
+          ),
         },
       );
     }
@@ -156,72 +155,76 @@ class ModelViewerState extends State<ModelViewer> {
 
   String _buildHTML(final String htmlTemplate) {
     return HTMLBuilder.build(
-      htmlTemplate: htmlTemplate,
-      src: '/model',
-      alt: widget.alt,
-      poster: widget.poster,
-      seamlessPoster: widget.seamlessPoster,
-      loading: widget.loading,
-      reveal: widget.reveal,
-      withCredentials: widget.withCredentials,
-      // AR Attributes
-      ar: widget.ar,
-      arModes: widget.arModes,
-      arScale: widget.arScale,
-      arPlacement: widget.arPlacement,
-      iosSrc: widget.iosSrc,
-      xrEnvironment: widget.xrEnvironment,
-      // Staing & Cameras Attributes
-      cameraControls: widget.cameraControls,
-      enablePan: widget.enablePan,
-      touchAction: widget.touchAction,
-      disableZoom: widget.disableZoom,
-      orbitSensitivity: widget.orbitSensitivity,
-      autoRotate: widget.autoRotate,
-      autoRotateDelay: widget.autoRotateDelay,
-      rotationPerSecond: widget.rotationPerSecond,
-      interactionPolicy: widget.interactionPolicy,
-      interactionPrompt: widget.interactionPrompt,
-      interactionPromptStyle: widget.interactionPromptStyle,
-      interactionPromptThreshold: widget.interactionPromptThreshold,
-      cameraOrbit: widget.cameraOrbit,
-      cameraTarget: widget.cameraTarget,
-      fieldOfView: widget.fieldOfView,
-      maxCameraOrbit: widget.maxCameraOrbit,
-      minCameraOrbit: widget.minCameraOrbit,
-      maxFieldOfView: widget.maxFieldOfView,
-      minFieldOfView: widget.minFieldOfView,
-      bounds: widget.bounds,
-      interpolationDecay: widget.interpolationDecay,
-      // Lighting & Env Attributes
-      skyboxImage: widget.skyboxImage,
-      environmentImage: widget.environmentImage,
-      exposure: widget.exposure,
-      shadowIntensity: widget.shadowIntensity,
-      shadowSoftness: widget.shadowSoftness,
-      // Animation Attributes
-      animationName: widget.animationName,
-      animationCrossfadeDuration: widget.animationCrossfadeDuration,
-      autoPlay: widget.autoPlay,
-      // Scene Graph Attributes
-      variantName: widget.variantName,
-      orientation: widget.orientation,
-      scale: widget.scale,
+        htmlTemplate: htmlTemplate,
+        src: '/model',
+        alt: widget.alt,
+        poster: widget.poster,
+        seamlessPoster: widget.seamlessPoster,
+        loading: widget.loading,
+        reveal: widget.reveal,
+        withCredentials: widget.withCredentials,
+        // AR Attributes
+        ar: widget.ar,
+        arModes: widget.arModes,
+        arScale: widget.arScale,
+        arPlacement: widget.arPlacement,
+        iosSrc: widget.iosSrc,
+        xrEnvironment: widget.xrEnvironment,
+        // Staing & Cameras Attributes
+        cameraControls: widget.cameraControls,
+        enablePan: widget.enablePan,
+        touchAction: widget.touchAction,
+        disableZoom: widget.disableZoom,
+        orbitSensitivity: widget.orbitSensitivity,
+        autoRotate: widget.autoRotate,
+        autoRotateDelay: widget.autoRotateDelay,
+        rotationPerSecond: widget.rotationPerSecond,
+        interactionPolicy: widget.interactionPolicy,
+        interactionPrompt: widget.interactionPrompt,
+        interactionPromptStyle: widget.interactionPromptStyle,
+        interactionPromptThreshold: widget.interactionPromptThreshold,
+        cameraOrbit: widget.cameraOrbit,
+        cameraTarget: widget.cameraTarget,
+        fieldOfView: widget.fieldOfView,
+        maxCameraOrbit: widget.maxCameraOrbit,
+        minCameraOrbit: widget.minCameraOrbit,
+        maxFieldOfView: widget.maxFieldOfView,
+        minFieldOfView: widget.minFieldOfView,
+        bounds: widget.bounds,
+        interpolationDecay: widget.interpolationDecay,
+        // Lighting & Env Attributes
+        skyboxImage: widget.skyboxImage,
+        environmentImage: widget.environmentImage,
+        exposure: widget.exposure,
+        shadowIntensity: widget.shadowIntensity,
+        shadowSoftness: widget.shadowSoftness,
+        // Animation Attributes
+        animationName: widget.animationName,
+        animationCrossfadeDuration: widget.animationCrossfadeDuration,
+        autoPlay: widget.autoPlay,
+        // Scene Graph Attributes
+        variantName: widget.variantName,
+        orientation: widget.orientation,
+        scale: widget.scale,
 
-      // CSS Styles
-      backgroundColor: widget.backgroundColor,
-      // Loading CSS
-      posterColor: widget.posterColor,
-      // Annotations CSS
-      minHotspotOpacity: widget.minHotspotOpacity,
-      maxHotspotOpacity: widget.maxHotspotOpacity,
+        // CSS Styles
+        backgroundColor: widget.backgroundColor,
+        // Loading CSS
+        posterColor: widget.posterColor,
+        // Annotations CSS
+        minHotspotOpacity: widget.minHotspotOpacity,
+        maxHotspotOpacity: widget.maxHotspotOpacity,
 
-      // Others
-      innerModelViewerHtml: widget.innerModelViewerHtml,
-      relatedCss: widget.relatedCss,
-      relatedJs: widget.relatedJs,
-      id: widget.id,
-    );
+        // Others
+        innerModelViewerHtml: widget.innerModelViewerHtml,
+        relatedCss: widget.relatedCss,
+        relatedJs: widget.relatedJs,
+        id: widget.id,
+
+        // For Getting the progress/isLoaded or Error of 3D model
+        onError: widget.onError,
+        onLoad: widget.onLoad,
+        onProgress: widget.onProgress);
   }
 
   Future<void> _initProxy() async {
@@ -236,8 +239,6 @@ class ModelViewerState extends State<ModelViewer> {
     });
 
     _proxy!.listen((final HttpRequest request) async {
-      //print("${request.method} ${request.uri}"); // DEBUG
-      //print(request.headers); // DEBUG
       final response = request.response;
 
       switch (request.uri.path) {
@@ -268,7 +269,6 @@ class ModelViewerState extends State<ModelViewer> {
 
         case '/model':
           if (url.isAbsolute && !url.isScheme("file")) {
-            // debugPrint(url.toString());
             await response.redirect(url); // TODO: proxy the resource
           } else {
             final data = await (url.isScheme("file")

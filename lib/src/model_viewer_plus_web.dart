@@ -42,17 +42,6 @@ class ModelViewerState extends State<ModelViewer> {
             'referrerpolicy'
           ],
           uriPolicy: _AllowUriPolicy())
-      ..allowElement('button',
-          attributes: [
-            'class',
-            'slot',
-            'data-position',
-            'data-normal',
-            'data-orbit',
-            'data-target',
-            'data-visibility-attribute'
-          ],
-          uriPolicy: _AllowUriPolicy())
       ..allowCustomElement('model-viewer',
           attributes: [
             'style',
@@ -162,75 +151,79 @@ class ModelViewerState extends State<ModelViewer> {
     }
 
     return HTMLBuilder.build(
-      htmlTemplate: htmlTemplate.replaceFirst(
-          '<script type="module" src="model-viewer.min.js" defer></script>',
-          ''),
-      // Attributes
-      src: widget.src,
-      alt: widget.alt,
-      poster: widget.poster,
-      seamlessPoster: widget.seamlessPoster,
-      loading: widget.loading,
-      reveal: widget.reveal,
-      withCredentials: widget.withCredentials,
-      // AR Attributes
-      ar: widget.ar,
-      arModes: widget.arModes,
-      arScale: widget.arScale,
-      arPlacement: widget.arPlacement,
-      iosSrc: widget.iosSrc,
-      xrEnvironment: widget.xrEnvironment,
-      // Staing & Cameras Attributes
-      cameraControls: widget.cameraControls,
-      enablePan: widget.enablePan,
-      touchAction: widget.touchAction,
-      disableZoom: widget.disableZoom,
-      orbitSensitivity: widget.orbitSensitivity,
-      autoRotate: widget.autoRotate,
-      autoRotateDelay: widget.autoRotateDelay,
-      rotationPerSecond: widget.rotationPerSecond,
-      interactionPolicy: widget.interactionPolicy,
-      interactionPrompt: widget.interactionPrompt,
-      interactionPromptStyle: widget.interactionPromptStyle,
-      interactionPromptThreshold: widget.interactionPromptThreshold,
-      cameraOrbit: widget.cameraOrbit,
-      cameraTarget: widget.cameraTarget,
-      fieldOfView: widget.fieldOfView,
-      maxCameraOrbit: widget.maxCameraOrbit,
-      minCameraOrbit: widget.minCameraOrbit,
-      maxFieldOfView: widget.maxFieldOfView,
-      minFieldOfView: widget.minFieldOfView,
-      bounds: widget.bounds,
-      interpolationDecay: widget.interpolationDecay,
-      // Lighting & Env Attributes
-      skyboxImage: widget.skyboxImage,
-      environmentImage: widget.environmentImage,
-      exposure: widget.exposure,
-      shadowIntensity: widget.shadowIntensity,
-      shadowSoftness: widget.shadowSoftness,
-      // Animation Attributes
-      animationName: widget.animationName,
-      animationCrossfadeDuration: widget.animationCrossfadeDuration,
-      autoPlay: widget.autoPlay,
-      // Scene Graph Attributes
-      variantName: widget.variantName,
-      orientation: widget.orientation,
-      scale: widget.scale,
+        htmlTemplate: htmlTemplate.replaceFirst(
+            '<script type="module" src="model-viewer.min.js" defer></script>',
+            ''),
+        // Attributes
+        src: widget.src,
+        alt: widget.alt,
+        poster: widget.poster,
+        seamlessPoster: widget.seamlessPoster,
+        loading: widget.loading,
+        reveal: widget.reveal,
+        withCredentials: widget.withCredentials,
+        // AR Attributes
+        ar: widget.ar,
+        arModes: widget.arModes,
+        arScale: widget.arScale,
+        arPlacement: widget.arPlacement,
+        iosSrc: widget.iosSrc,
+        xrEnvironment: widget.xrEnvironment,
+        // Staing & Cameras Attributes
+        cameraControls: widget.cameraControls,
+        enablePan: widget.enablePan,
+        touchAction: widget.touchAction,
+        disableZoom: widget.disableZoom,
+        orbitSensitivity: widget.orbitSensitivity,
+        autoRotate: widget.autoRotate,
+        autoRotateDelay: widget.autoRotateDelay,
+        rotationPerSecond: widget.rotationPerSecond,
+        interactionPolicy: widget.interactionPolicy,
+        interactionPrompt: widget.interactionPrompt,
+        interactionPromptStyle: widget.interactionPromptStyle,
+        interactionPromptThreshold: widget.interactionPromptThreshold,
+        cameraOrbit: widget.cameraOrbit,
+        cameraTarget: widget.cameraTarget,
+        fieldOfView: widget.fieldOfView,
+        maxCameraOrbit: widget.maxCameraOrbit,
+        minCameraOrbit: widget.minCameraOrbit,
+        maxFieldOfView: widget.maxFieldOfView,
+        minFieldOfView: widget.minFieldOfView,
+        bounds: widget.bounds,
+        interpolationDecay: widget.interpolationDecay,
+        // Lighting & Env Attributes
+        skyboxImage: widget.skyboxImage,
+        environmentImage: widget.environmentImage,
+        exposure: widget.exposure,
+        shadowIntensity: widget.shadowIntensity,
+        shadowSoftness: widget.shadowSoftness,
+        // Animation Attributes
+        animationName: widget.animationName,
+        animationCrossfadeDuration: widget.animationCrossfadeDuration,
+        autoPlay: widget.autoPlay,
+        // Scene Graph Attributes
+        variantName: widget.variantName,
+        orientation: widget.orientation,
+        scale: widget.scale,
 
-      // CSS Styles
-      backgroundColor: widget.backgroundColor,
-      // Loading CSS
-      posterColor: widget.posterColor,
-      // Annotations CSS
-      minHotspotOpacity: widget.minHotspotOpacity,
-      maxHotspotOpacity: widget.maxHotspotOpacity,
+        // CSS Styles
+        backgroundColor: widget.backgroundColor,
+        // Loading CSS
+        posterColor: widget.posterColor,
+        // Annotations CSS
+        minHotspotOpacity: widget.minHotspotOpacity,
+        maxHotspotOpacity: widget.maxHotspotOpacity,
 
-      // Others
-      innerModelViewerHtml: widget.innerModelViewerHtml,
-      relatedCss: widget.relatedCss,
-      relatedJs: widget.relatedJs,
-      id: widget.id,
-    );
+        // Others
+        innerModelViewerHtml: widget.innerModelViewerHtml,
+        relatedCss: widget.relatedCss,
+        relatedJs: widget.relatedJs,
+        id: widget.id,
+
+        // For Getting the progress/isLoaded or Error of 3D model
+        onError: widget.onError,
+        onLoad: widget.onLoad,
+        onProgress: widget.onProgress);
   }
 }
 

@@ -3,6 +3,7 @@
 import 'dart:convert' show htmlEscape;
 
 import 'package:flutter/material.dart';
+
 import '../model_viewer_plus.dart';
 
 abstract class HTMLBuilder {
@@ -76,6 +77,11 @@ abstract class HTMLBuilder {
     final String? relatedCss,
     final String? relatedJs,
     final String? id,
+
+    // For Getting the progress/isLoaded or Error of 3D model
+    final Function(double)? onProgress,
+    final Function(String)? onError,
+    final Function(bool)? onLoad,
   }) {
     if (relatedCss != null) {
       htmlTemplate = htmlTemplate.replaceFirst('/* other-css */', relatedCss);
@@ -86,7 +92,7 @@ abstract class HTMLBuilder {
 
     final html = StringBuffer(htmlTemplate);
 
-    html.write('<model-viewer');
+    html.write('<model-viewer id="modelViewer" ');
 
     // Attributes
     // Loading Attributes
@@ -413,9 +419,23 @@ abstract class HTMLBuilder {
     }
     html.writeln('</model-viewer>');
 
-    if (relatedJs != null) {
+    if (relatedJs != null ||
+        onProgress != null ||
+        onError != null ||
+        onLoad != null) {
       html.writeln('<script>');
-      html.write(relatedJs);
+      html.write(relatedJs ?? '');
+      html.writeln("""
+            document.getElementById('modelViewer').addEventListener('error', (event) => { 
+              Error.postMessage(event.detail.type);
+            });
+            document.getElementById('modelViewer').addEventListener('progress', (event) => { 
+              Progress.postMessage(event.detail.totalProgress);
+            });
+            document.getElementById('modelViewer').addEventListener('load', (event) => { 
+              Load.postMessage('Loaded');
+            });
+            """);
       html.writeln('</script>');
     }
 

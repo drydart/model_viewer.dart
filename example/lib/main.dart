@@ -13,13 +13,27 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(title: Text("Model Viewer")),
         body: ModelViewer(
           backgroundColor: Color.fromARGB(0xFF, 0xEE, 0xEE, 0xEE),
-          src: 'assets/Astronaut.glb', // a bundled asset file
+          src: 'assets/Astronaut.glb',
+          // a bundled asset file
           alt: "A 3D model of an astronaut",
           ar: true,
           arModes: ['scene-viewer', 'webxr', 'quick-look'],
           autoRotate: true,
           cameraControls: true,
           iosSrc: 'https://modelviewer.dev/shared-assets/models/Astronaut.usdz',
+          onProgress: (value) {
+            //return progress of 3D model
+          },
+          onLoad: (value) {
+            if (value) {
+              //call when 3D model loads
+            }
+          },
+          onError: (error) {
+            if (error.isNotEmpty) {
+              //call when getting an error while loading a 3D model
+            }
+          },
         ),
       ),
     );
