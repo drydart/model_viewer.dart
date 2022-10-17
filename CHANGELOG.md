@@ -5,68 +5,125 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.8.1] - 2020-08-21
-
-### Fixed
-
-- Set `android:usesCleartextTraffic="true"` for Android 9+ in the example
-  app to fix `net::ERR_CLEARTEXT_NOT_PERMITTED`. ([#7])
-- Improved the reliability of the `localhost` HTTP proxy.
-
-### Added
-
-- Documented `android:usesCleartextTraffic="true"` in the README. ([#7])
+## [1.3.3] - 2022-09-18
 
 ### Changed
 
-- Defaulted the background color to white when not specified. ([#7])
-
-## [0.8.0] - 2020-08-20
-
-### Changed
-
-- Required [flutter_android](https://pub.dev/packages/flutter_android)
-  0.8.0+.
+- Fix: `Removing disallowed element <SCRIPT> from [object DocumentFragment]`, in `lib\src\model_viewer_plus_web.dart`
+- Update `example\lib\loading\display_poster.dart`
+- Update `README.md`, due to `<model-viewer>` upgrades to 2.0.0 and we have not keep up with it's latest version. So, Flutter Web users should replace `src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"` with `src="./assets/packages/model_viewer_plus/assets/model-viewer.min.js"` to use the js file in our package.
 
 ### Added
 
-- Support for loading bundled asset files.
-- Support for loading local files from `file://` URLs.
-- Implemented a `localhost` HTTP server and proxy.
+- Add a new example: `example\lib\loading\render_scale.dart`
 
-## [0.7.0] - 2020-08-18
+## [1.3.2] - 2022-09-14
 
 ### Changed
 
-- Required [flutter_android](https://pub.dev/packages/flutter_android)
-  for launching the Scene Viewer. ([#4])
+- Update `html_builder.dart`:
+  - Fix `min-camera-orbit`, `max-field-of-view`, `min-field-of-view`
 
-- Upgraded to model-viewer.js
-  [1.1.0](https://github.com/google/model-viewer/releases/tag/v1.1.0).
+## [1.3.1] - 2022-08-04
 
-### Fixed
+### Changed
 
-- Launching the Scene Viewer on Android now works. (Fixes [#4])
+- Upgrade `pubspec.yaml`:
+  - `webview_flutter: ^3.0.1` -> `webview_flutter: ^3.0.4`
+  - `url_launcher: ^6.1.0` -> `url_launcher: ^6.1.5`
 
-- Improved error logging in case of loading errors.
+## [1.3.0]~~[1.2.1]~~ - 2022-06-22
 
-## [0.6.0] - 2020-08-18
+### Changed
 
-### Fixed
+- `README.md`: `import 'package:model_viewer_plus/model_viewer.dart';` -> `import 'package:model_viewer_plus/model_viewer_plus.dart';`
+- `lib\html_builder.dart`: fix typos and uncomment `debugPrint` for more debug info
+- `lib\model_viewer_plus_mobile.dart`: uncomment `debugPrint` for more debug info
+- `lib\model_viewer_plus_web.dart`: unique viewType to fix [#29](https://github.com/omchiii/model_viewer_plus.dart/issues/29)
+- Update `assets/model-viewer.min.js` to v1.20.0
 
-- Escaped HTML attributes on the `<model-viewer>` web component.
-
-## [0.5.0] - 2020-07-22
+## [1.2.0] - 2022-04-26
 
 ### Added
 
-- Frequently asked questions and answers in the README.
+- More examples in `example/lib`
 
-[0.8.1]: https://github.com/drydart/model_viewer.dart/compare/0.8.0...0.8.1
-[0.8.0]: https://github.com/drydart/model_viewer.dart/compare/0.7.0...0.8.0
-[0.7.0]: https://github.com/drydart/model_viewer.dart/compare/0.6.0...0.7.0
-[0.6.0]: https://github.com/drydart/model_viewer.dart/compare/0.5.0...0.6.0
-[0.5.0]: https://github.com/drydart/model_viewer.dart/compare/0.4.0...0.5.0
+### Changed
 
-[#4]:    https://github.com/drydart/model_viewer.dart/issues/4
-[#7]:    https://github.com/drydart/model_viewer.dart/issues/7
+- `lib\html_builder.dart`, `lib\model_viewer_plus_mobile.dart`, `lib\model_viewer_plus_web.dart`, `lib\model_viewer_plus.dart`: implement all the attributes of `<model-viewer>` v1.11.1.
+- ModelViewer.arSacle from `final String? arScale` to `final ArScale? arScale`, which may be a breaking change.
+- Update `assets/model-viewer.min.js` to v1.11.1
+- Update example dir's gradle version to 7.0.2
+
+## [1.1.5] - 2022-03-15
+
+### Changed
+
+- `lib/src/model_viewer_plus_mobile.dart`
+  - Fix [#11](https://github.com/omchiii/model_viewer_plus.dart/issues/11), add `gestureRecognizers`
+  - A less elegant solution of [#8](https://github.com/omchiii/model_viewer_plus.dart/issues/8), open usdz file by [url_launcher](https://pub.dev/packages/url_launcher) in SFSafariViewController.
+
+## [1.1.4] - 2022-03-14
+
+### Changed
+
+- `/lib/src/model_viewer_plus_mobile.dart`, update according to the [newest document](https://developers.google.com/ar/develop/scene-viewer#3d-or-ar). Fix [#9](https://github.com/omchiii/model_viewer_plus.dart/issues/9).
+  - Insted of `com.google.ar.core`, now we use `com.google.android.googlequicksearchbox`. This should support the widest possible range of devices.
+  - Mode defaults to `ar_preferred`. Scene Viewer launches in AR native mode as the entry mode. If Google Play Services for AR isn't present, Scene Viewer gracefully falls back to 3D mode as the entry mode.
+- Add `arModes` to example, closer to [modelviewer.dev](https://modelviewer.dev)'s offical example.
+- Update `example\android\app\build.gradle` `compileSdkVersion` to 31
+- Update `android_intent_plus` to `3.1.1`
+- Update `webview_flutter` to `3.0.1`
+
+### Removed
+
+- `/lib/src/http_proxy.dart`: empty file
+
+## [1.1.3] - 2022-03-14
+
+### Changed
+
+- `ModelViewer`'s default `backgroundColor` from `Colors.white` to `Colors.transparent`, due to [#12](https://github.com/omchiii/model_viewer_plus.dart/issues/12)
+- `proxy`'s null check fix and `setState() {}` for it, due to [#10](https://github.com/omchiii/model_viewer_plus.dart/issues/10)
+
+## [1.1.2] - 2022-02-17
+
+### Added
+
+- `/lib/src/shim/` with `dart_html_fake.dart` and `dart_ui_fake.dart`. Fixing `ERROR: The name platformViewRegistry' is being referenced through the prefix 'ui', but it isn't defined in any of the libraries imported using that prefix.` and `INFO: Avoid using web-only libraries outside Flutter web plugin` to improve the [score on pub.dev](https://pub.dev/packages/model_viewer_plus/score).
+
+### Changed
+
+- example's `/etc/assets` -> `/assets`
+
+## [1.1.1] - 2022-02-17
+
+### Added
+
+- `/assets/model-viewer.min.js` (v1.10.1, which is actually identical to v1.10.0)
+
+### Changed
+
+- `/etc/assets` -> `/assets`
+- `example/flutter_02.png`: Updated the Screenshot.
+- `README.md`: README Update.
+- `lib/src/model_viewer_plus_web.dart`: Due to the change of `model-viewer.js` -> `model-viewer.min.js`
+- `lib/src/model_viewer_plus_mobile.dart`: Due to the change of `model-viewer.js` -> `model-viewer.min.js`, added CircularProgressIndicator while mobile platform loading
+
+### Removed
+
+- `/etc/assets/model-viewer.js`: To slim the package size.
+
+## [1.1.0] - 2022-02-15
+
+### Added
+
+- Web Support
+  - `lib/src/model_viewer_plus_stub.dart`
+  - `lib/src/model_viewer_plus_mobile.dart`
+  - `lib/src/model_viewer_plus_web.dart`
+
+### Changed
+
+- `lib/model_viewer_plus.dart`
+- `lib/src/model_viewer_plus.dart`

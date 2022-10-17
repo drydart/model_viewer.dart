@@ -1,9 +1,7 @@
 # 3D Model Viewer for Flutter
 
-[![Project license](https://img.shields.io/badge/license-Public%20Domain-blue.svg)](https://unlicense.org)
-[![Dart compatibility](https://img.shields.io/badge/dart-2.8%2B-blue)](https://pub.dev/packages/model_viewer)
-[![Pub package](https://img.shields.io/pub/v/model_viewer.svg)](https://pub.dev/packages/model_viewer)
-[![Dartdoc reference](https://img.shields.io/badge/dartdoc-reference-blue.svg)](https://pub.dev/documentation/model_viewer/latest/)
+<https://pub.dev/packages/model_viewer> - Fork from a package that is discontinued,
+and add the web support for it.
 
 This is a [Flutter](https://flutter.dev) widget for rendering interactive
 3D models in the [glTF](https://www.khronos.org/gltf/) and
@@ -14,15 +12,16 @@ web component in a [WebView](https://pub.dev/packages/webview_flutter).
 
 ## Screenshot
 
-<img alt="Screenshot of astronaut model" src="https://raw.githubusercontent.com/drydart/model_viewer.dart/master/example/flutter_01.png" width="480"/>
-
-## Prerequisites
-
-- [Dart](https://dart.dev) 2.8+ and [Flutter](https://flutter.dev) 1.17+
+<img alt="Screenshot of astronaut model" src="./example/flutter_01.png" width="480"/>
+<img alt="Screenshot of astronaut model" src="./example/flutter_02.png" width="480"/>
 
 ## Compatibility
 
-Android and iOS, with [a recent system browser version](https://modelviewer.dev/#section-browser-support).
+Android, iOS, Web, with [a recent system browser version](https://modelviewer.dev/#section-browser-support).
+
+## Notes
+
+We use the [Google APP](https://play.google.com/store/apps/details?id=com.google.android.googlequicksearchbox), `com.google.android.googlequicksearchbox` to display interactive 3D models on Android. The model displays in 'ar_preferred' mode by default, Scene Viewer launches in AR native mode as the entry mode. If [Google Play Services for AR (ARCore, `com.google.ar.core`)](https://play.google.com/store/apps/details?id=com.google.ar.core) isn't present, Scene Viewer gracefully falls back to 3D mode as the entry mode.
 
 ## Installation
 
@@ -30,7 +29,7 @@ Android and iOS, with [a recent system browser version](https://modelviewer.dev/
 
 ```yaml
 dependencies:
-  model_viewer: ^0.8.1
+   model_viewer_plus: ^(newest from https://pub.dev/packages/model_viewer_plus)
 ```
 
 ### `AndroidManifest.xml` (Android 9+ only)
@@ -58,6 +57,19 @@ changed the default for [`android:usesCleartextTraffic`] from `true` to
 
 This does not affect Android 8 and earlier. See [#7] for more information.
 
+### `app/build.gradle` (Android only)
+
+Change minSdkVersion to 19.
+
+    defaultConfig {
+        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+        applicationId "com.example.lab_rat"
+        minSdkVersion 19
+        targetSdkVersion flutter.targetSdkVersion
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
+    }
+
 ### `Info.plist` (iOS only)
 
 To use this widget on iOS, you need to opt-in to the embedded views preview
@@ -68,6 +80,22 @@ the key `io.flutter.embedded_views_preview` and the value `YES`:
 <key>io.flutter.embedded_views_preview</key>
 <true/>
 ```
+
+### `web/index.html` (Web only)
+
+Modify the `<head>` tag of your `web/index.html` to load the JavaScript, like so:
+
+```html
+<head>
+
+  <!-- Other stuff -->
+
+  <script type="module" src="./assets/packages/model_viewer_plus/assets/model-viewer.min.js" defer></script>
+</head>
+```
+
+`./assets/packages/model_viewer_plus/assets/model-viewer.min.js` will use the default js file which is included in this package's asset. The [official site](https://modelviewer.dev) uses unpkg, by using `https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js`, you are using the latest version of `<model-viewier>`. You may replace the
+value of `src` attribute with another CDN mirror's URL. But please notice that our model-viewer-plus maybe not able to keep up with the `<model-viewier>`'s latest version.
 
 ## Features
 
@@ -89,7 +117,7 @@ the key `io.flutter.embedded_views_preview` and the value `YES`:
 ### Importing the library
 
 ```dart
-import 'package:model_viewer/model_viewer.dart';
+import 'package:model_viewer_plus/model_viewer_plus.dart';
 ```
 
 ### Creating a `ModelViewer` widget
@@ -125,6 +153,8 @@ class MyApp extends StatelessWidget {
 ```
 
 ### Loading a model from the file system
+
+This is not avaliable on Web.
 
 ```dart
 class MyApp extends StatelessWidget {

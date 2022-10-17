@@ -7,11 +7,10 @@
 # Editor backup files
 *~
 
-# Pandoc outputs
-*.html
-
 # Dart artifacts
 .dart_tool/
 .packages
 build/
 pubspec.lock
+.flutter-plugins
+.flutter-plugins-dependencies
